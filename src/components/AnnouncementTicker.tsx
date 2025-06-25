@@ -1,15 +1,13 @@
 "use client";
 
+import { Announcement } from "@/models/Announcement_Model";
 import { useState, useEffect } from "react";
 
-const announcements = [
-  "Latest: Applications open for PM Awas Yojana till 30th November 2023.",
-  "Notice: Gram Sabha meeting on 15th November at 10 AM in Panchayat Office.",
-  "Alert: Water supply will be interrupted on 12th November for maintenance work.",
-  "Update: New health camp organized on 20th November at Primary Health Center.",
-];
-
-const AnnouncementTicker = () => {
+const AnnouncementTicker = ({
+  announcements,
+}: {
+  announcements: Announcement[];
+}) => {
   const [currentAnnouncement, setCurrentAnnouncement] = useState(0);
 
   useEffect(() => {
@@ -27,13 +25,13 @@ const AnnouncementTicker = () => {
           <div className="flex-1 text-center">
             {announcements.map((announcement, index) => (
               <p
-                key={index}
+                key={announcement.content}
                 className={`whitespace-nowrap text-govt-dark ${
                   index === currentAnnouncement ? "block" : "hidden"
                 }`}
                 aria-live="polite"
               >
-                {announcement}
+                {announcement.content}
               </p>
             ))}
           </div>

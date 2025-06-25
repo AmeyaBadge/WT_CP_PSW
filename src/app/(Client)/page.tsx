@@ -1,12 +1,70 @@
 import AnnouncementTicker from "@/components/AnnouncementTicker";
+import { connectToDatabase } from "@/lib/mongodb";
+import { Announcement } from "@/models/Announcement_Model";
 import Image from "next/image";
-import React from "react";
+import React, { Suspense } from "react";
 
-const page = () => {
+const announcements: Announcement[] = [
+  {
+    type: "Alert",
+    date: "Today",
+    content:
+      "Latest: Applications open for PM Awas Yojana till 30th November 2023.",
+  },
+  {
+    type: "Alert",
+    date: "Today",
+    content:
+      "Notice: Gram Sabha meeting on 15th November at 10 AM in Panchayat Office.",
+  },
+  {
+    type: "Alert",
+    date: "Today",
+    content:
+      "Alert: Water supply will be interrupted on 12th November for maintenance work.",
+  },
+  {
+    type: "Alert",
+    date: "Today",
+    content:
+      "Update: New health camp organized on 20th November at Primary Health Center.",
+  },
+];
+
+const getAnnouncements = (): Promise<Announcement[]> => {
+  return new Promise((resolve) =>
+    setTimeout(() => {
+      console.log("Done");
+      return resolve(announcements);
+    }, 6000)
+  );
+};
+
+const Ticker = async () => {
+  const data: Announcement[] = await getAnnouncements();
+  return <AnnouncementTicker announcements={data} />;
+};
+
+const page = async () => {
+  // const { db } = await connectToDatabase();
+  // const data: Announcement[] = db.collection("");
+
   return (
     <>
       <div className="">
-        <AnnouncementTicker />
+        {/* <Suspense
+          fallback={
+            <div className="bg-govt-saffron text-black py-2 mb-6 overflow-hidden">
+              <div className="container mx-auto px-4">
+                <div className="flex items-center">
+                  <div className="flex-1 text-center">Loading...</div>
+                </div>
+              </div>
+            </div>
+          }
+        > */}
+        <Ticker />
+        {/* </Suspense> */}
       </div>
 
       <div className="container mx-auto px-4">
