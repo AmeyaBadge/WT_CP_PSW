@@ -24,11 +24,11 @@ const AnnouncementTicker = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center">
           <span className="font-bold mr-4">{/* Latest: */}</span>
-          <div className="flex-1">
+          <div className="flex-1 text-center">
             {announcements.map((announcement, index) => (
               <p
                 key={index}
-                className={`whitespace-nowrap text-shadow-lg ${
+                className={`whitespace-nowrap text-govt-dark ${
                   index === currentAnnouncement ? "block" : "hidden"
                 }`}
                 aria-live="polite"

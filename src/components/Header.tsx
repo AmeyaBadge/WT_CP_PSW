@@ -29,7 +29,9 @@ const Header = () => {
         <div className="bg-govt-saffron h-2 w-full" />
 
         {/* Main Header */}
-        <div className="flex md:flex-row items-center justify-between py-4 px-4 md:px-10 shadow-lg">
+        <div
+          className={`flex md:flex-row items-center justify-between py-4 px-4 md:px-10 shadow-lg`}
+        >
           <div className="flex items-center space-x-4">
             {/* Ashoka Emblem */}
             <div className="size-12 md:size-16 relative">
