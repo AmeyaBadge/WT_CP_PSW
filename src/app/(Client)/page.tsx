@@ -107,6 +107,54 @@ const schemes = [
   // Add more schemes...
 ];
 
+const departments = [
+  {
+    id: "rural-development",
+    name: "Rural Development",
+    description:
+      "Responsible for implementing rural development schemes and infrastructure projects.",
+    detailedDescription:
+      "The Rural Development Department of Panchayat Samiti Wai oversees the implementation of various central and state government schemes aimed at improving rural infrastructure, livelihood opportunities, and quality of life in villages under its jurisdiction. The department works closely with Gram Panchayats to identify needs and execute development projects.",
+    image: "/assets/departments/rural-dev.jpg",
+    phone: "02162-234567",
+    email: "rural_dev@wai.gov.in",
+    schemesCount: 8,
+    hierarchy: [
+      {
+        title: "Block Development Officer",
+        name: "Shri. Vikram Joshi",
+        children: [
+          {
+            title: "Assistant BDO",
+            name: "Smt. Priya Kale",
+            children: [
+              {
+                title: "Gram Sevak",
+                name: "Shri. Raju Patil",
+              },
+              {
+                title: "Extension Officer",
+                name: "Smt. Meena Deshpande",
+              },
+            ],
+          },
+          {
+            title: "Accountant",
+            name: "Shri. Sanjay Pawar",
+          },
+        ],
+      },
+      // ... other top-level positions ...
+    ],
+    gallery: [
+      "/images/gallery/rural1.jpg",
+      "/images/gallery/rural2.jpg",
+      // More images...
+    ],
+  },
+  // More departments...
+];
+
 const getAnnouncements = (): Promise<Announcement[]> => {
   // console.log("func called");
   return new Promise((resolve) =>
@@ -127,6 +175,7 @@ const AnnouncementsRender = async () => {
 };
 
 const featuredSchemes = schemes.slice(0, 3);
+const featuredDepartments = departments.slice(0, 3);
 
 const page = async () => {
   // const { db } = await connectToDatabase();
@@ -261,6 +310,45 @@ const page = async () => {
           <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6">
             {members.map((member) => (
               <MemberCard key={member.id} member={member} />
+            ))}
+          </div>
+        </section>
+
+        {/* Departments */}
+        <section className="mb-12">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl md:text-3xl font-bold text-govt-blue">
+              Departments
+            </h2>
+            <Link
+              href="/departments"
+              className="text-govt-blue font-semibold hover:underline"
+            >
+              View all departments →
+            </Link>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6">
+            {featuredDepartments.map((dept) => (
+              <div
+                key={dept.id}
+                className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200"
+              >
+                <div className="p-4">
+                  <h3 className="text-xl font-bold text-govt-blue mb-2">
+                    {dept.name}
+                  </h3>
+                  <p className="text-gray-600 mb-4 line-clamp-2">
+                    {dept.description}
+                  </p>
+                  <Link
+                    href={`/departments/${dept.id}`}
+                    className="text-govt-saffron font-semibold hover:underline"
+                    aria-label={`Learn more about ${dept.name} department`}
+                  >
+                    View Department
+                  </Link>
+                </div>
+              </div>
             ))}
           </div>
         </section>
