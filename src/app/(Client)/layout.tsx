@@ -15,9 +15,9 @@ export default function ClientRootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <>
+    <div className="bg-govt-extra-light min-h-screen">
       <Header />
       {children}
-    </>
+    </div>
   );
 }

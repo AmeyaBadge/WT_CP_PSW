@@ -8,4 +8,48 @@
   --color-govt-extra-light: #f5f5f5;
   --color-govt-dark: #1e1e1e;
   --font-noto-sans: "Noto Sans", "sans-serif";
+  --shadow-govt:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+@layer components {
+  .card {
+    @apply bg-white rounded-lg shadow-govt p-8;
+  }
+}
+
+.marathi {
+  font-family: "Noto Sans Devanagari", "Noto Sans", sans-serif;
+}
+
+/* Accessibility focus styles */
+:focus-visible {
+  outline: 3px solid var(--govt-saffron);
+  outline-offset: 2px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.tree-connector {
+  position: absolute;
+  border-color: #6b7280; /* gray-500 */
+}
+
+.tree-node-content {
+  transition: all 0.2s ease;
+}
+
+.tree-node-content:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
