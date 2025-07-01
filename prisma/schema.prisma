@@ -1,0 +1,91 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Announcement {
+  id        String           @id @default(cuid())
+  creatorId String
+  type      AnnouncementType
+}
+
+enum AnnouncementType {
+  Alert
+  Notice
+  Update
+}
+
+model Department {
+  id          String @id @default(cuid())
+  slug        String @unique
+  name        String @unique
+  image       String
+  description String
+  contact     String
+  moderatorId String // clerkId
+
+  //Relations
+  // hierarchy User[]
+  images  Gallery[]
+  schemes Scheme[]
+}
+
+model Gallery {
+  id           String      @id @default(cuid())
+  url          String
+  type         GalleryType
+  departmentId String?
+  schemeId     String?
+
+  // Relations
+  department Department? @relation(fields: [departmentId], references: [id])
+  scheme     Scheme?     @relation(fields: [schemeId], references: [id])
+}
+
+enum GalleryType {
+  Department
+  Scheme
+}
+
+model Scheme {
+  id                  String     @id @default(cuid())
+  slug                String     @unique
+  name                String
+  shortDesc           String
+  description         String
+  image               String?
+  departmentId        String
+  creatorId           String
+  type                SchemeType
+  eligibility         String?
+  deadline            DateTime?
+  benifits            String?
+  howToApply          String?
+  documentsReq        String?
+  applyLink           String?
+  applicationFormLink String?
+
+  // Relations
+  // faqs FAQ[]
+  images     Gallery[]
+  department Department @relation(fields: [departmentId], references: [id])
+
+  @@index([slug])
+}
+
+enum SchemeType {
+  Central
+  State
+  Local
+}
