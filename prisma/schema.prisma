@@ -14,10 +14,29 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id      String @id @default(cuid())
+  clerkId String @unique
+  name    String
+  email   String @unique
+  image   String
+
+  createdAt DateTime @default(now())
+
+  //Relations
+  announcements Announcement[]
+}
+
 model Announcement {
   id        String           @id @default(cuid())
   creatorId String
   type      AnnouncementType
+  title     String
+  content   String?
+  createdAt DateTime         @default(now())
+
+  // Relation
+  creator User @relation(fields: [creatorId], references: [id])
 }
 
 enum AnnouncementType {

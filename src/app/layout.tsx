@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Noto_Sans } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
+import { dark } from "@clerk/themes";
 
 const notoSans = Noto_Sans({
   variable: "--font-noto-sans",
@@ -26,7 +27,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
+    <ClerkProvider
+      appearance={{
+        baseTheme: dark,
+        variables: {
+          colorBackground: "#18181b",
+        },
+      }}
+    >
       <html
         lang="en"
         className={`${notoSans.variable} antialiased`}

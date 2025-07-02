@@ -1,5 +1,3 @@
-import { DarkModeToggler } from "@/components/DarkModeToggler";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardHeader,
@@ -8,7 +6,7 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { SignIn } from "@clerk/nextjs";
-import { dark } from "@clerk/themes";
+import { LoaderCircle } from "lucide-react";
 
 export default function SignInPage() {
   return (
@@ -73,12 +71,11 @@ export default function SignInPage() {
           </SignInButton> */}
 
           <SignIn
-            appearance={{
-              baseTheme: dark,
-              variables: {
-                colorBackground: "#18181b",
-              },
-            }}
+            fallback={
+              <div className="text-primary flex items-center justify-center">
+                <LoaderCircle className="size-8 animate-spin m-4" />
+              </div>
+            }
           />
         </CardContent>
       </Card>

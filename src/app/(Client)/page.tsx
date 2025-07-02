@@ -1,3 +1,4 @@
+import { getAllNotifications } from "@/actions/announcement.action";
 import Announcements from "@/components/Announcements";
 import AnnouncementTicker from "@/components/AnnouncementTicker";
 import MemberCard from "@/components/MemberCard";

@@ -1,7 +1,8 @@
-import { AppSidebar } from "@/components/AppSidebar";
-import { ThemeProvider } from "@/components/ThemeProvider";
+import { AppSidebar } from "@/components/admin/AppSidebar";
+import { ThemeProvider } from "@/components/admin/ThemeProvider";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import type { Metadata, Viewport } from "next";
+import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
   title: {
@@ -24,7 +25,8 @@ export default function AdminRootLayout({
       enableSystem
       disableTransitionOnChange
     >
-      <div className="min-h-screen">{children}</div>
+      <div className="min-h-screen w-full">{children}</div>
+      <Toaster />
     </ThemeProvider>
   );
 }
