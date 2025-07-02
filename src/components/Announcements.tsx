@@ -1,4 +1,4 @@
-import { Announcement } from "@/models/Announcement_Model";
+import { getLatestAnnouncements } from "@/actions/client/announcement.action";
 import React from "react";
 
 // const announcements = [
@@ -22,10 +22,12 @@ import React from "react";
 //   },
 // ];
 
+type AnnouncementType = Awaited<ReturnType<typeof getLatestAnnouncements>>[0];
+
 const Announcements = ({
   announcements,
 }: {
-  announcements: Announcement[];
+  announcements: AnnouncementType[];
 }) => {
   return (
     <section aria-labelledby="announcements-heading">
@@ -36,15 +38,15 @@ const Announcements = ({
         <ul className="divide-y divide-gray-200">
           {announcements.map((announcement) => (
             // <li key={announcement.id} className="py-3">
-            <li key={announcement.content} className="py-3">
+            <li key={announcement.id} className="py-3">
               <a
                 // href={announcement.link}
                 href={"#"}
                 className="flex flex-col md:flex-row justify-between md:items-center hover:text-govt-blue transition-colors"
               >
-                <span>{announcement.content}</span>
+                <span>{announcement.title}</span>
                 <span className="text-sm text-gray-500">
-                  {new Date(announcement.date).toLocaleDateString("en-IN")}
+                  {new Date(announcement.createdAt).toLocaleDateString("en-IN")}
                 </span>
               </a>
             </li>

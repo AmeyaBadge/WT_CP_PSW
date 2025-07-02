@@ -1,12 +1,14 @@
 "use client";
 
-import { Announcement } from "@/models/Announcement_Model";
+import { getLatestAnnouncements } from "@/actions/client/announcement.action";
 import { useState, useEffect } from "react";
+
+type AnnouncementType = Awaited<ReturnType<typeof getLatestAnnouncements>>[0];
 
 const AnnouncementTicker = ({
   announcements,
 }: {
-  announcements: Announcement[];
+  announcements: AnnouncementType[];
 }) => {
   const [currentAnnouncement, setCurrentAnnouncement] = useState(0);
 
@@ -23,15 +25,15 @@ const AnnouncementTicker = ({
         <div className="flex items-center">
           <span className="font-bold mr-4">{/* Latest: */}</span>
           <div className="flex-1 text-center">
-            {announcements.map((announcement, index) => (
+            {announcements.map((item, index) => (
               <p
-                key={announcement.content}
+                key={item.id}
                 className={`whitespace-nowrap text-govt-dark ${
                   index === currentAnnouncement ? "block" : "hidden"
                 }`}
                 aria-live="polite"
               >
-                {announcement.content}
+                {item.type}: {item.title}
               </p>
             ))}
           </div>

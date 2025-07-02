@@ -3,7 +3,7 @@ import { SidebarTrigger } from "../ui/sidebar";
 import { Separator } from "../ui/separator";
 import { UserButton } from "@clerk/nextjs";
 import DarkModeToggler from "./DarkModeToggler";
-import { syncUser } from "@/actions/user.action";
+import { syncUser } from "@/actions/admin/user.action";
 
 const AdminHeader = async () => {
   try {

@@ -1,41 +1,12 @@
-import { getAllNotifications } from "@/actions/announcement.action";
+import { getLatestAnnouncements } from "@/actions/client/announcement.action";
 import Announcements from "@/components/Announcements";
 import AnnouncementTicker from "@/components/AnnouncementTicker";
 import MemberCard from "@/components/MemberCard";
 import SchemeCard from "@/components/SchemeCard";
 import { members } from "@/constants/Home_Persons";
-import { connectToDatabase } from "@/lib/mongodb";
-import { Announcement } from "@/models/Announcement_Model";
 import Image from "next/image";
 import Link from "next/link";
 import React, { Suspense } from "react";
-
-const announcements: Announcement[] = [
-  {
-    type: "Alert",
-    date: "Today",
-    content:
-      "Latest: Applications open for PM Awas Yojana till 30th November 2023.",
-  },
-  {
-    type: "Alert",
-    date: "Today",
-    content:
-      "Notice: Gram Sabha meeting on 15th November at 10 AM in Panchayat Office.",
-  },
-  {
-    type: "Alert",
-    date: "Today",
-    content:
-      "Alert: Water supply will be interrupted on 12th November for maintenance work.",
-  },
-  {
-    type: "Alert",
-    date: "Today",
-    content:
-      "Update: New health camp organized on 20th November at Primary Health Center.",
-  },
-];
 
 const schemes = [
   {
@@ -156,22 +127,14 @@ const departments = [
   // More departments...
 ];
 
-const getAnnouncements = (): Promise<Announcement[]> => {
-  // console.log("func called");
-  return new Promise((resolve) =>
-    setTimeout(() => {
-      // console.log("Done");
-      return resolve(announcements);
-    }, 6000)
-  );
-};
+type AnnouncementType = Awaited<ReturnType<typeof getLatestAnnouncements>>[0];
 
 const Ticker = async () => {
-  const data: Announcement[] = await getAnnouncements();
+  const data: AnnouncementType[] = await getLatestAnnouncements();
   return <AnnouncementTicker announcements={data} />;
 };
 const AnnouncementsRender = async () => {
-  const data: Announcement[] = await getAnnouncements();
+  const data: AnnouncementType[] = await getLatestAnnouncements();
   return <Announcements announcements={data} />;
 };
 

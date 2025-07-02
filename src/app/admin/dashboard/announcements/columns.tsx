@@ -1,6 +1,6 @@
 "use client";
 
-import { deleteAnnouncement } from "@/actions/announcement.action";
+import { deleteAnnouncement } from "@/actions/admin/announcement.action";
 import CreateAnnouncementDialog from "@/components/admin/CreateAnnouncementDialog";
 import {
   AlertDialog,
@@ -67,7 +67,6 @@ export const announcementColumns: ColumnDef<AnnouncementRow>[] = [
     header: "Actions",
     cell: ({ row }) => {
       const { id, title, type, content } = row.original;
-
       return (
         <div className="flex gap-2">
           <CreateAnnouncementDialog

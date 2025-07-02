@@ -1,4 +1,4 @@
-import { getAllAnnouncements } from "@/actions/announcement.action";
+import { getAllAnnouncements } from "@/actions/admin/announcement.action";
 import { Heading } from "@/components/admin/Heading";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";

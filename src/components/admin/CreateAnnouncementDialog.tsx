@@ -17,7 +17,7 @@ import FormSubmitButton from "./FormSubmitButton";
 import {
   createAnnouncement,
   updateAnnouncement,
-} from "@/actions/announcement.action";
+} from "@/actions/admin/announcement.action";
 import { useFormStatus } from "react-dom";
 import { useState } from "react";
 import { Textarea } from "../ui/textarea";
