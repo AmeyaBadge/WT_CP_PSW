@@ -13,24 +13,16 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+
 import { ColumnDef } from "@tanstack/react-table";
-import { EllipsisVertical, SquarePen, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import toast from "react-hot-toast";
 
 export type AnnouncementRow = {
   id: string;
   title: string;
-  content: string;
-  type: "Alert" | "Update" | "Notice";
+  content: string | null;
+  type: "Alert" | "Notice" | "Update";
   creator: string;
   createdAt: string;
 };

@@ -17,7 +17,7 @@ export const syncUser = async () => {
 
     if (existingUser) return;
 
-    const dbUser = await prisma.user.create({
+    await prisma.user.create({
       data: {
         clerkId: userId,
         name: `${user.firstName || ""} ${user.lastName || ""}`,

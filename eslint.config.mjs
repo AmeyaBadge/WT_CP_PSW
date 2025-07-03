@@ -9,8 +9,20 @@ const compat = new FlatCompat({
   baseDirectory: __dirname,
 });
 
-const eslintConfig = [
+// ✅ Main export
+export default [
+  // 🔥 Add this block at the top to ignore files/folders
+  {
+    ignores: [
+      "node_modules/**",
+      ".next/**",
+      "dist/**",
+      "build/**",
+      "out/**",
+      "src/generated/**", // ✅ your Prisma WASM or generated stuff
+    ],
+  },
+
+  // ✅ Then bring in your old-style Next.js ESLint config
   ...compat.extends("next/core-web-vitals", "next/typescript"),
 ];
-
-export default eslintConfig;

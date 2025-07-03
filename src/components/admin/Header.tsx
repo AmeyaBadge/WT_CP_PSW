@@ -4,13 +4,12 @@ import { Separator } from "../ui/separator";
 import { UserButton } from "@clerk/nextjs";
 import DarkModeToggler from "./DarkModeToggler";
 import { syncUser } from "@/actions/admin/user.action";
+import { currentUser } from "@clerk/nextjs/server";
 
 const AdminHeader = async () => {
-  try {
-    await syncUser();
-  } catch (error) {
-    console.log(error);
-  }
+  const user = await currentUser();
+  if (user) await syncUser();
+
   return (
     <header className="flex h-16 shrink-0 items-center justify-between gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
       <div className="flex items-center gap-2 px-4">

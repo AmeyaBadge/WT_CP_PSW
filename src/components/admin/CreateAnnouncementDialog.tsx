@@ -3,7 +3,6 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -13,7 +12,6 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { LoaderCircle, Plus, SquarePen } from "lucide-react";
-import FormSubmitButton from "./FormSubmitButton";
 import {
   createAnnouncement,
   updateAnnouncement,
@@ -40,11 +38,11 @@ const CreateAnnouncementDialog = ({
   updateId?: string;
   updateType?: "Alert" | "Update" | "Notice";
   updateTitle?: string;
-  updateContent?: string;
+  updateContent?: string | null;
 }) => {
   const { pending } = useFormStatus();
   const [title, setTitle] = useState(updateTitle);
-  const [text, setText] = useState(updateContent);
+  const [text, setText] = useState(updateContent ? updateContent : "");
 
   const updateAnnouncementById = updateAnnouncement.bind(null, updateId);
 
@@ -83,7 +81,7 @@ const CreateAnnouncementDialog = ({
                 <Label htmlFor="announcementType">Type</Label>
                 <Select
                   name="type"
-                  defaultValue="Alert"
+                  defaultValue={updateType}
                   onValueChange={(val) => console.log(val)}
                 >
                   <SelectTrigger className="w-[180px]">

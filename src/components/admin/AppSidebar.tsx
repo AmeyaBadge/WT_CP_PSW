@@ -1,9 +1,6 @@
 import {
-  BellIcon,
   Calendar,
   Home,
-  Inbox,
-  LogOut,
   LogOutIcon,
   Megaphone,
   Search,

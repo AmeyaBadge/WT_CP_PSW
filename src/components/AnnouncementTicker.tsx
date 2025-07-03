@@ -17,7 +17,7 @@ const AnnouncementTicker = ({
       setCurrentAnnouncement((prev) => (prev + 1) % announcements.length);
     }, 5000);
     return () => clearInterval(interval);
-  }, []);
+  });
 
   return (
     <div className="bg-govt-saffron text-white py-2 mb-6 overflow-hidden">

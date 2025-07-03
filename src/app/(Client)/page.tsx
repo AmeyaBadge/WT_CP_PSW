@@ -187,10 +187,7 @@ const page = async () => {
           </div>
         </section>
 
-        <section
-          aria-description="Latest Announcements Section"
-          className="mb-12"
-        >
+        <section className="mb-12">
           <Suspense
             fallback={
               <div className="card w-full bg-white">

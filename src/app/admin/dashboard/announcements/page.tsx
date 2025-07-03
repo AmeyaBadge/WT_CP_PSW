@@ -1,12 +1,12 @@
+export const dynamic = "force-dynamic";
+
 import { getAllAnnouncements } from "@/actions/admin/announcement.action";
 import { Heading } from "@/components/admin/Heading";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Plus } from "lucide-react";
 import { Metadata } from "next";
 import React from "react";
 import { AnnouncementDataTable } from "./data-table";
-import { announcementColumns, AnnouncementRow } from "./columns";
+import { announcementColumns } from "./columns";
 import { AnnouncementType } from "@/generated/prisma";
 import CreateAnnouncementDialog from "@/components/admin/CreateAnnouncementDialog";
 

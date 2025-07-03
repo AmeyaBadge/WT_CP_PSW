@@ -1,7 +1,5 @@
-import { AppSidebar } from "@/components/admin/AppSidebar";
 import { ThemeProvider } from "@/components/admin/ThemeProvider";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import type { Metadata, Viewport } from "next";
+import type { Metadata } from "next";
 import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
