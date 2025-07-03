@@ -23,6 +23,7 @@ import { Separator } from "../ui/separator";
 import { SignOutButton } from "@clerk/nextjs";
 import { Button } from "../ui/button";
 import Link from "next/link";
+import Image from "next/image";
 
 // Menu items.
 const items = [
@@ -61,11 +62,30 @@ const items = [
 export function AppSidebar() {
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeader>PSW</SidebarHeader>
+      <SidebarHeader className="border-b">
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              asChild
+              className="data-[slot=sidebar-menu-button]:!p-1.5"
+            >
+              <Link href="#">
+                <Image
+                  src={"/assets/National-Emblem-White.png"}
+                  width={20}
+                  height={20}
+                  alt=""
+                />
+                <span className="text-base font-semibold">PSW - Manage</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarHeader>
       <Separator />
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
+          {/* <SidebarGroupLabel>Application</SidebarGroupLabel> */}
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
