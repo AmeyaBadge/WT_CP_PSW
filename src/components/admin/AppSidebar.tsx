@@ -5,6 +5,7 @@ import {
   Megaphone,
   Search,
   Settings,
+  UsersIcon,
 } from "lucide-react";
 
 import {
@@ -29,6 +30,11 @@ const items = [
     title: "Home",
     url: "/admin/dashboard",
     icon: Home,
+  },
+  {
+    title: "Users",
+    url: "/admin/dashboard/users",
+    icon: UsersIcon,
   },
   {
     title: "Announcements",
