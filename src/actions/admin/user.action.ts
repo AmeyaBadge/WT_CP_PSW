@@ -1,5 +1,12 @@
+"use server";
+
 import prisma from "@/lib/prisma";
+import { checkRole } from "@/lib/roles";
 import { auth, currentUser } from "@clerk/nextjs/server";
+
+export const isAdmin = async () => {
+  return await checkRole("admin");
+};
 
 export const syncUser = async () => {
   try {

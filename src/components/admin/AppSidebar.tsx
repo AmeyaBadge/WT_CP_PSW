@@ -24,6 +24,7 @@ import { SignOutButton } from "@clerk/nextjs";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import Image from "next/image";
+import { isAdmin } from "@/actions/admin/user.action";
 
 // Menu items.
 const items = [
@@ -36,6 +37,7 @@ const items = [
     title: "Users",
     url: "/admin/dashboard/users",
     icon: UsersIcon,
+    adminOnly: true,
   },
   {
     title: "Announcements",
@@ -59,7 +61,9 @@ const items = [
   },
 ];
 
-export function AppSidebar() {
+export const AppSidebar = async () => {
+  const admin = await isAdmin();
+
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader className="border-b">
@@ -88,16 +92,18 @@ export function AppSidebar() {
           {/* <SidebarGroupLabel>Application</SidebarGroupLabel> */}
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <Link href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {items
+                .filter((item) => !item.adminOnly || admin)
+                .map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton asChild>
+                      <Link href={item.url}>
+                        <item.icon />
+                        <span>{item.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <SignOutButton redirectUrl="/">
@@ -114,4 +120,4 @@ export function AppSidebar() {
       </SidebarContent>
     </Sidebar>
   );
-}
+};
