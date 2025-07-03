@@ -23,6 +23,19 @@ export default [
     ],
   },
 
+  // Custom rules override
+  {
+    files: ["**/*.ts", "**/*.tsx"],
+    languageOptions: {
+      parserOptions: {
+        project: "./tsconfig.json",
+      },
+    },
+    rules: {
+      "@typescript-eslint/no-unused-vars": "warn", // ✅ your rule override here
+    },
+  },
+
   // ✅ Then bring in your old-style Next.js ESLint config
   ...compat.extends("next/core-web-vitals", "next/typescript"),
 ];
