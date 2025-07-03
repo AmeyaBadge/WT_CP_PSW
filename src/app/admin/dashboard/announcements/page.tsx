@@ -40,7 +40,6 @@ function transformData(
 const AnnouncmenetsPage = async () => {
   const data = await getAllAnnouncements();
   const announcements = transformData(data);
-  console.log("Announcements : ", announcements);
 
   return (
     <div className="w-full space-y-4">
