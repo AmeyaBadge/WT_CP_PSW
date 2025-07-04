@@ -15,16 +15,19 @@ datasource db {
 }
 
 model User {
-  id      String @id @default(cuid())
-  clerkId String @unique
-  name    String
-  email   String @unique
-  image   String
+  id           String  @id @default(cuid())
+  clerkId      String  @unique
+  name         String
+  email        String  @unique
+  image        String
+  departmentId String?
+  approved     Boolean @default(false)
 
   createdAt DateTime @default(now())
 
   //Relations
   announcements Announcement[]
+  department    Department?    @relation(fields: [departmentId], references: [id]) // one-to-one relation
 }
 
 model Announcement {
@@ -36,7 +39,7 @@ model Announcement {
   createdAt DateTime         @default(now())
 
   // Relation
-  creator User @relation(fields: [creatorId], references: [id])
+  creator User @relation(fields: [creatorId], references: [id], onDelete: Cascade)
 }
 
 enum AnnouncementType {
@@ -52,12 +55,12 @@ model Department {
   image       String
   description String
   contact     String
-  moderatorId String // clerkId
 
   //Relations
   // hierarchy User[]
-  images  Gallery[]
-  schemes Scheme[]
+  images     Gallery[]
+  schemes    Scheme[]
+  moderators User[]
 }
 
 model Gallery {
@@ -68,8 +71,8 @@ model Gallery {
   schemeId     String?
 
   // Relations
-  department Department? @relation(fields: [departmentId], references: [id])
-  scheme     Scheme?     @relation(fields: [schemeId], references: [id])
+  department Department? @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+  scheme     Scheme?     @relation(fields: [schemeId], references: [id], onDelete: Cascade)
 }
 
 enum GalleryType {
