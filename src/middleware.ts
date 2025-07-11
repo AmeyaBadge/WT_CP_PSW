@@ -1,9 +1,25 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
 
 const isProtectedRoute = createRouteMatcher(["/admin/dashboard(.*)"]);
 
 export default clerkMiddleware(async (auth, req) => {
-  if (isProtectedRoute(req)) await auth.protect();
+  if (!isProtectedRoute(req)) return;
+
+  const { isAuthenticated, sessionClaims } = await auth();
+  const role = sessionClaims?.metadata?.role;
+
+  // If not logged in, redirect to login
+  if (!isAuthenticated) {
+    return NextResponse.redirect(new URL("/admin/login", req.url));
+  }
+
+  // If logged in but not authorized
+  if (role !== "admin" && role !== "moderator") {
+    return NextResponse.redirect(new URL("/403", req.url));
+  }
+
+  // If authenticated and authorized, do nothing (let request continue)
 });
 
 export const config = {

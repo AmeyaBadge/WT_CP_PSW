@@ -7,8 +7,12 @@ import { syncUser } from "@/actions/admin/user.action";
 import { currentUser } from "@clerk/nextjs/server";
 
 const AdminHeader = async () => {
-  const user = await currentUser();
-  if (user) await syncUser();
+  try {
+    const user = await currentUser();
+    if (user) await syncUser();
+  } catch (error) {
+    console.log(error);
+  }
 
   return (
     <header className="flex h-16 shrink-0 items-center justify-between gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
