@@ -27,7 +27,7 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "../../../../../components/ui/avatar";
-import RemoveUserForm from "./RemoveUserForm";
+import RemoveUserForm from "./RemoveUserButton";
 import ApproveUserButton from "./ApproveUserButton";
 
 type UsersType = Awaited<ReturnType<typeof getAllUsers>>;

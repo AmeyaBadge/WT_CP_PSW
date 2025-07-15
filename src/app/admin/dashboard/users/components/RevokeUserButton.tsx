@@ -50,7 +50,7 @@ const RevokeUserButton = ({ dbId }: { dbId: string }) => {
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            This will revoke the user's approval and they will no longer be
+            This will revoke the user&apos;s approval and they will no longer be
             authorized.
           </AlertDialogDescription>
         </AlertDialogHeader>
