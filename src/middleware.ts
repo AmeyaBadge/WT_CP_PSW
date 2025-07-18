@@ -7,12 +7,13 @@ export default clerkMiddleware(async (auth, req) => {
   if (!isProtectedRoute(req)) return;
 
   const { isAuthenticated, sessionClaims } = await auth();
-  const role = sessionClaims?.metadata?.role;
 
   // If not logged in, redirect to login
   if (!isAuthenticated) {
     return NextResponse.redirect(new URL("/admin/login", req.url));
   }
+
+  const role = sessionClaims?.metadata?.role;
 
   // If logged in but not authorized
   if (role !== "admin" && role !== "moderator") {

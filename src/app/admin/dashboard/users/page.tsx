@@ -6,6 +6,7 @@ import React from "react";
 import { Metadata } from "next";
 import ApproveUsersDialog from "@/app/admin/dashboard/users/components/ApproveUsersDialog";
 import ManageUsersTable from "./components/ManageUsersTable";
+import InviteUserDialog from "./components/InviteUserDialog";
 
 export const metadata: Metadata = {
   title: "Users",
@@ -38,7 +39,8 @@ const ManageUsers = async () => {
           title="User Management"
           description="Manage users associated with the departments. Approve only known users as this exposes the systems to external users."
         />
-        <ApproveUsersDialog users={unapprovedUsers} />
+        <ApproveUsersDialog />
+        <InviteUserDialog />
       </div>
       <Separator />
 
