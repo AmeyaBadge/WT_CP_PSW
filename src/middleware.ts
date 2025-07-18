@@ -13,10 +13,11 @@ export default clerkMiddleware(async (auth, req) => {
     return NextResponse.redirect(new URL("/admin/login", req.url));
   }
 
-  const role = sessionClaims?.metadata?.role;
+  const role = sessionClaims?.metadata.role;
+  const approved = sessionClaims?.metadata.approved;
 
   // If logged in but not authorized
-  if (role !== "admin" && role !== "moderator") {
+  if ((role !== "admin" && role !== "moderator") || approved !== true) {
     return NextResponse.redirect(new URL("/403", req.url));
   }
 

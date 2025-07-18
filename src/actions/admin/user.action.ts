@@ -31,7 +31,7 @@ export const setRole = async (formData: FormData) => {
 };
 
 // Change the role in metadata and remove the department from the user table record
-export const removeRole = async (dbId: string) => {
+export const revokeUser = async (dbId: string) => {
   try {
     if (!(await isAdmin())) throw new Error("Unauthorized access.");
     if (!dbId) throw new Error("Id required");
@@ -48,10 +48,8 @@ export const removeRole = async (dbId: string) => {
 
     const clerkId = modifiedUser.clerkId;
 
-    const client = await clerkClient();
-
     const _res = await client.users.updateUserMetadata(clerkId, {
-      publicMetadata: { role: null },
+      publicMetadata: { approved: false },
     });
 
     revalidatePath("/");
@@ -67,11 +65,17 @@ export const approveUser = async (dbId: string, _formData: FormData) => {
 
     if (!dbId) throw new Error("Id required");
 
-    const _user = await prisma.user.update({
+    const user = await prisma.user.update({
       where: {
         id: dbId,
       },
       data: {
+        approved: true,
+      },
+    });
+
+    const res = await client.users.updateUserMetadata(user.clerkId, {
+      publicMetadata: {
         approved: true,
       },
     });
@@ -219,6 +223,8 @@ export const inviteUser = async ({
       ignoreExisting: true,
       publicMetadata: {
         role: "moderator",
+        approved: false,
+        // ToDo : Add Department ID as well
       },
     });
 
