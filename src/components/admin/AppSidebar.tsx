@@ -1,5 +1,6 @@
 import {
   Calendar,
+  FolderTree,
   Home,
   LogOutIcon,
   Megaphone,
@@ -45,19 +46,9 @@ const items = [
     icon: Megaphone,
   },
   {
-    title: "Calendar",
-    url: "#",
-    icon: Calendar,
-  },
-  {
-    title: "Search",
-    url: "#",
-    icon: Search,
-  },
-  {
-    title: "Settings",
-    url: "#",
-    icon: Settings,
+    title: "Departments",
+    url: "/admin/dashboard/departments",
+    icon: FolderTree,
   },
 ];
 
