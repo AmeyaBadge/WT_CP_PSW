@@ -24,10 +24,14 @@ export function SchemeImageUpload({
 
   const onUpload = (result: any) => {
     if (result.event === "success") {
-      const newUrls = [...value, result.info.secure_url];
-      console.log("Image uploaded successfully. New URLs:", newUrls);
-      onChange(newUrls);
-      setIsUploading(false);
+      // Add the new image URL to the existing array
+      const newUrl = result.info.secure_url;
+      console.log("Image uploaded successfully:", newUrl);
+      
+      // Create new array with the new URL
+      const updatedUrls = [...value, newUrl];
+      console.log("Updated URLs array:", updatedUrls);
+      onChange(updatedUrls);
       
       // Force cleanup of any modal overlays
       setTimeout(() => {
@@ -38,6 +42,11 @@ export function SchemeImageUpload({
         document.body.style.overflow = '';
         document.documentElement.style.overflow = '';
       }, 100);
+    }
+    
+    // Only set uploading to false when upload is complete or aborted
+    if (result.event === "success" || result.event === "abort") {
+      setIsUploading(false);
     }
   };
 
