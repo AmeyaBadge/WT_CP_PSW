@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Header from "@/components/Header";
+import PublicLayout from "@/components/PublicLayout";
 
 export const metadata: Metadata = {
   title: {
@@ -14,10 +14,5 @@ export default function ClientRootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <div className="bg-govt-extra-light min-h-screen">
-      <Header />
-      {children}
-    </div>
-  );
+  return <PublicLayout>{children}</PublicLayout>;
 }

@@ -5,10 +5,11 @@ import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
+import { GalleryImageDisplay } from "@/components/admin/GalleryImageDisplay";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { Edit, Calendar, ExternalLink, FileText, Users, Building2 } from "lucide-react";
+import { Edit, Calendar, ExternalLink, FileText, Users, Building2, Images } from "lucide-react";
 import { Metadata } from "next";
 
 interface SchemeDetailsPageProps {
@@ -146,6 +147,17 @@ const SchemeDetailsPage = async ({ params }: SchemeDetailsPageProps) => {
               <div className="prose max-w-none">
                 <p className="text-gray-700 whitespace-pre-wrap">{scheme.documentsReq}</p>
               </div>
+            </Card>
+          )}
+
+          {/* Gallery Images */}
+          {scheme.images && scheme.images.length > 0 && (
+            <Card className="p-6">
+              <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                <Images className="h-5 w-5" />
+                Gallery Images
+              </h3>
+              <GalleryImageDisplay images={scheme.images} isEditable={true} />
             </Card>
           )}
         </div>

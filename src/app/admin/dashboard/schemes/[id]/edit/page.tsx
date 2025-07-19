@@ -46,6 +46,7 @@ const EditSchemePage = async ({ params }: EditSchemePageProps) => {
     applyLink: scheme.applyLink,
     applicationFormLink: scheme.applicationFormLink,
     departmentId: scheme.departmentId,
+    images: scheme.images || [], // Include gallery images
   };
 
   return (

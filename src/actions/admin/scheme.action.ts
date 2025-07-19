@@ -7,6 +7,7 @@ import { getCurrentUserDepartmentId } from "./department.action";
 import { revalidatePath } from "next/cache";
 import { SchemeType, GalleryType } from "@/generated/prisma";
 import { generateUniqueSchemeSlug } from "@/lib/utils";
+import { deleteImageFromCloudinary, deleteMultipleImagesFromCloudinary } from "@/lib/cloudinary";
 
 // Get all schemes (Admin only - sees all schemes)
 export const getAllSchemes = async () => {
@@ -328,6 +329,9 @@ export const updateScheme = async (id: string, formData: FormData) => {
     }
 
     // Update scheme and gallery images in transaction
+    const oldCoverImage = existingScheme.image;
+    const oldGalleryImages = existingScheme.images?.map(img => img.url) || [];
+    
     await prisma.$transaction(async (tx) => {
       // Update scheme
       await tx.scheme.update({
@@ -367,6 +371,29 @@ export const updateScheme = async (id: string, formData: FormData) => {
       }
     });
 
+    // Clean up old images from Cloudinary (don't block the response)
+    const imagesToDelete: string[] = [];
+    
+    // Check if cover image changed and delete old one
+    if (oldCoverImage && oldCoverImage !== image) {
+      imagesToDelete.push(oldCoverImage);
+    }
+    
+    // Find removed gallery images
+    const removedGalleryImages = oldGalleryImages.filter(oldUrl => !imageUrls.includes(oldUrl));
+    imagesToDelete.push(...removedGalleryImages);
+    
+    // Delete removed images from Cloudinary
+    if (imagesToDelete.length > 0) {
+      deleteMultipleImagesFromCloudinary(imagesToDelete)
+        .then(result => {
+          console.log(`Cloudinary cleanup: ${result.success} deleted, ${result.failed} failed`);
+        })
+        .catch(error => {
+          console.error('Error cleaning up Cloudinary images:', error);
+        });
+    }
+
     revalidatePath("/admin/dashboard/schemes");
     revalidatePath(`/admin/dashboard/schemes/${id}`);
     return { success: true, message: "Scheme updated successfully!" };
@@ -386,15 +413,99 @@ export const deleteScheme = async (id: string) => {
     const existingScheme = await getSchemeById(id);
     if (!existingScheme) throw new Error("Scheme not found!");
 
+    // Collect all image URLs that need to be deleted from Cloudinary
+    const imagesToDelete: string[] = [];
+    
+    // Add cover image if it exists
+    if (existingScheme.image) {
+      imagesToDelete.push(existingScheme.image);
+    }
+    
+    // Add gallery images if they exist
+    if (existingScheme.images && existingScheme.images.length > 0) {
+      existingScheme.images.forEach(img => {
+        imagesToDelete.push(img.url);
+      });
+    }
+
+    // Delete the scheme from database (this will also delete gallery images due to cascade)
     await prisma.scheme.delete({
       where: { id },
     });
+
+    // Delete images from Cloudinary (don't block the response if this fails)
+    if (imagesToDelete.length > 0) {
+      deleteMultipleImagesFromCloudinary(imagesToDelete)
+        .then(result => {
+          console.log(`Cloudinary cleanup: ${result.success} deleted, ${result.failed} failed`);
+        })
+        .catch(error => {
+          console.error('Error cleaning up Cloudinary images:', error);
+        });
+    }
 
     revalidatePath("/admin/dashboard/schemes");
     return { success: true, message: "Scheme deleted successfully!" };
   } catch (error: any) {
     console.log("Error deleting scheme: ", error);
     return { success: false, message: error.message || "Failed to delete scheme" };
+  }
+};
+
+// Remove individual gallery image
+export const removeGalleryImage = async (imageId: string) => {
+  try {
+    const userId = await getDbUserId();
+    if (!userId) throw new Error("Unauthorized access!");
+
+    // Get the image to delete from Cloudinary
+    const galleryImage = await prisma.gallery.findUnique({
+      where: { id: imageId },
+      include: {
+        scheme: {
+          select: {
+            id: true,
+            departmentId: true,
+          },
+        },
+      },
+    });
+
+    if (!galleryImage) {
+      throw new Error("Gallery image not found!");
+    }
+
+    // Check if user has access to this scheme
+    const isUserAdmin = await isAdmin();
+    const userDepartmentId = await getCurrentUserDepartmentId();
+    
+    if (!isUserAdmin && galleryImage.scheme?.departmentId !== userDepartmentId) {
+      throw new Error("Access denied to this scheme!");
+    }
+
+    // Delete from database
+    await prisma.gallery.delete({
+      where: { id: imageId },
+    });
+
+    // Delete from Cloudinary (don't block the response if this fails)
+    deleteImageFromCloudinary(galleryImage.url)
+      .then(success => {
+        if (success) {
+          console.log('Successfully deleted gallery image from Cloudinary');
+        } else {
+          console.error('Failed to delete gallery image from Cloudinary');
+        }
+      })
+      .catch(error => {
+        console.error('Error deleting gallery image from Cloudinary:', error);
+      });
+
+    revalidatePath("/admin/dashboard/schemes");
+    return { success: true, message: "Gallery image removed successfully!" };
+  } catch (error: any) {
+    console.log("Error removing gallery image: ", error);
+    return { success: false, message: error.message || "Failed to remove gallery image" };
   }
 };
 
