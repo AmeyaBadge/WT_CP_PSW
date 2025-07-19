@@ -136,7 +136,7 @@ const page = async () => {
                 key={scheme.id}
                 schemeId={scheme.slug}
                 title={scheme.name}
-                department={scheme.departmentId.name}
+                department={scheme.department.name}
                 description={scheme.shortDesc}
                 image={scheme.image || "/assets/schemes/default.jpg"}
               />
