@@ -16,7 +16,10 @@ const PublicFooter = () => {
                 </Link>
               </li>
               <li>
-                <Link href="/about" className="hover:text-govt-saffron transition">
+                <Link
+                  href="/about"
+                  className="hover:text-govt-saffron transition"
+                >
                   About Wai
                 </Link>
               </li>
@@ -37,12 +40,18 @@ const PublicFooter = () => {
                 </Link>
               </li>
               <li>
-                <Link href="/announcements" className="hover:text-govt-saffron transition">
+                <Link
+                  href="/announcements"
+                  className="hover:text-govt-saffron transition"
+                >
                   Announcements
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="hover:text-govt-saffron transition">
+                <Link
+                  href="/contact"
+                  className="hover:text-govt-saffron transition"
+                >
                   Contact Us
                 </Link>
               </li>
@@ -141,12 +150,35 @@ const PublicFooter = () => {
         </div>
 
         {/* Copyright */}
-        <div className="border-t border-gray-700 pt-4 text-center text-sm">
-          <p>
+        <div className="border-t border-gray-700 pt-4 text-center">
+          <p className="text-sm">
             © {new Date().getFullYear()} Panchayat Samiti Wai. All Rights
             Reserved.
           </p>
-          <p className="mt-2">Designed and Developed for the people of Wai.</p>
+          <div className="mt-4 pt-2 border-t border-gray-700/50">
+            <p className="text-xs text-gray-300">
+              Designed, Developed & Maintained by
+            </p>
+            <p className="mt-1 font-medium">
+              <Link
+                href="https://www.linkedin.com/in/ameyabadge"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block hover:text-govt-saffron transition-colors hover:scale-105 transform duration-200"
+              >
+                Ameya
+              </Link>
+              <span className="mx-2 text-gray-400">&</span>
+              <Link
+                href="https://www.linkedin.com/in/chetan-jain-0011b3229/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block hover:text-govt-saffron transition-colors hover:scale-105 transform duration-200"
+              >
+                Chetan
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
     </footer>
