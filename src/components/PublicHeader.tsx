@@ -12,6 +12,8 @@ const menuItems = [
   { label: "Announcements", href: "/announcements" },
   { label: "About Wai", href: "/about" },
   { label: "Contact", href: "/contact" },
+  { label: "RTI", href: "/rti" },
+  { label: "RTS", href: "/rts" },
 ];
 
 const PublicHeader = () => {
@@ -116,7 +118,7 @@ const PublicHeader = () => {
 
             {/* Language Switcher */}
             <div className="hidden md:block ml-10">
-              <LanguageSwitcher />
+              {/* <LanguageSwitcher /> */}
             </div>
           </div>
         </div>
@@ -172,9 +174,7 @@ const PublicHeader = () => {
             }}
             className="w-full flex justify-center"
           >
-            <div className="mt-4">
-              <LanguageSwitcher />
-            </div>
+            <div className="mt-4">{/* <LanguageSwitcher /> */}</div>
           </li>
         </ul>
       </div>
