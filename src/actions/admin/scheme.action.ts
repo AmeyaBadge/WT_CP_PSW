@@ -7,7 +7,10 @@ import { getCurrentUserDepartmentId } from "./department.action";
 import { revalidatePath } from "next/cache";
 import { SchemeType, GalleryType } from "@/generated/prisma";
 import { generateUniqueSchemeSlug } from "@/lib/utils";
-import { deleteImageFromCloudinary, deleteMultipleImagesFromCloudinary } from "@/lib/cloudinary";
+import {
+  deleteImageFromCloudinary,
+  deleteMultipleImagesFromCloudinary,
+} from "@/lib/cloudinary";
 
 // Get all schemes (Admin only - sees all schemes)
 export const getAllSchemes = async () => {
@@ -49,7 +52,7 @@ export const getAllSchemes = async () => {
         },
       },
       orderBy: {
-        name: "asc",
+        createdAt: "desc",
       },
     });
 
@@ -103,7 +106,7 @@ export const getDepartmentSchemes = async () => {
         },
       },
       orderBy: {
-        name: "asc",
+        createdAt: "desc",
       },
     });
 
@@ -268,7 +271,10 @@ export const createScheme = async (formData: FormData) => {
     return { success: true, message: "Scheme created successfully!" };
   } catch (error: any) {
     console.log("Error creating scheme: ", error);
-    return { success: false, message: error.message || "Failed to create scheme" };
+    return {
+      success: false,
+      message: error.message || "Failed to create scheme",
+    };
   }
 };
 
@@ -330,8 +336,8 @@ export const updateScheme = async (id: string, formData: FormData) => {
 
     // Update scheme and gallery images in transaction
     const oldCoverImage = existingScheme.image;
-    const oldGalleryImages = existingScheme.images?.map(img => img.url) || [];
-    
+    const oldGalleryImages = existingScheme.images?.map((img) => img.url) || [];
+
     await prisma.$transaction(async (tx) => {
       // Update scheme
       await tx.scheme.update({
@@ -373,24 +379,28 @@ export const updateScheme = async (id: string, formData: FormData) => {
 
     // Clean up old images from Cloudinary (don't block the response)
     const imagesToDelete: string[] = [];
-    
+
     // Check if cover image changed and delete old one
     if (oldCoverImage && oldCoverImage !== image) {
       imagesToDelete.push(oldCoverImage);
     }
-    
+
     // Find removed gallery images
-    const removedGalleryImages = oldGalleryImages.filter(oldUrl => !imageUrls.includes(oldUrl));
+    const removedGalleryImages = oldGalleryImages.filter(
+      (oldUrl) => !imageUrls.includes(oldUrl)
+    );
     imagesToDelete.push(...removedGalleryImages);
-    
+
     // Delete removed images from Cloudinary
     if (imagesToDelete.length > 0) {
       deleteMultipleImagesFromCloudinary(imagesToDelete)
-        .then(result => {
-          console.log(`Cloudinary cleanup: ${result.success} deleted, ${result.failed} failed`);
+        .then((result) => {
+          console.log(
+            `Cloudinary cleanup: ${result.success} deleted, ${result.failed} failed`
+          );
         })
-        .catch(error => {
-          console.error('Error cleaning up Cloudinary images:', error);
+        .catch((error) => {
+          console.error("Error cleaning up Cloudinary images:", error);
         });
     }
 
@@ -399,7 +409,10 @@ export const updateScheme = async (id: string, formData: FormData) => {
     return { success: true, message: "Scheme updated successfully!" };
   } catch (error: any) {
     console.log("Error updating scheme: ", error);
-    return { success: false, message: error.message || "Failed to update scheme" };
+    return {
+      success: false,
+      message: error.message || "Failed to update scheme",
+    };
   }
 };
 
@@ -415,15 +428,15 @@ export const deleteScheme = async (id: string) => {
 
     // Collect all image URLs that need to be deleted from Cloudinary
     const imagesToDelete: string[] = [];
-    
+
     // Add cover image if it exists
     if (existingScheme.image) {
       imagesToDelete.push(existingScheme.image);
     }
-    
+
     // Add gallery images if they exist
     if (existingScheme.images && existingScheme.images.length > 0) {
-      existingScheme.images.forEach(img => {
+      existingScheme.images.forEach((img) => {
         imagesToDelete.push(img.url);
       });
     }
@@ -436,11 +449,13 @@ export const deleteScheme = async (id: string) => {
     // Delete images from Cloudinary (don't block the response if this fails)
     if (imagesToDelete.length > 0) {
       deleteMultipleImagesFromCloudinary(imagesToDelete)
-        .then(result => {
-          console.log(`Cloudinary cleanup: ${result.success} deleted, ${result.failed} failed`);
+        .then((result) => {
+          console.log(
+            `Cloudinary cleanup: ${result.success} deleted, ${result.failed} failed`
+          );
         })
-        .catch(error => {
-          console.error('Error cleaning up Cloudinary images:', error);
+        .catch((error) => {
+          console.error("Error cleaning up Cloudinary images:", error);
         });
     }
 
@@ -448,7 +463,10 @@ export const deleteScheme = async (id: string) => {
     return { success: true, message: "Scheme deleted successfully!" };
   } catch (error: any) {
     console.log("Error deleting scheme: ", error);
-    return { success: false, message: error.message || "Failed to delete scheme" };
+    return {
+      success: false,
+      message: error.message || "Failed to delete scheme",
+    };
   }
 };
 
@@ -478,8 +496,11 @@ export const removeGalleryImage = async (imageId: string) => {
     // Check if user has access to this scheme
     const isUserAdmin = await isAdmin();
     const userDepartmentId = await getCurrentUserDepartmentId();
-    
-    if (!isUserAdmin && galleryImage.scheme?.departmentId !== userDepartmentId) {
+
+    if (
+      !isUserAdmin &&
+      galleryImage.scheme?.departmentId !== userDepartmentId
+    ) {
       throw new Error("Access denied to this scheme!");
     }
 
@@ -490,22 +511,25 @@ export const removeGalleryImage = async (imageId: string) => {
 
     // Delete from Cloudinary (don't block the response if this fails)
     deleteImageFromCloudinary(galleryImage.url)
-      .then(success => {
+      .then((success) => {
         if (success) {
-          console.log('Successfully deleted gallery image from Cloudinary');
+          console.log("Successfully deleted gallery image from Cloudinary");
         } else {
-          console.error('Failed to delete gallery image from Cloudinary');
+          console.error("Failed to delete gallery image from Cloudinary");
         }
       })
-      .catch(error => {
-        console.error('Error deleting gallery image from Cloudinary:', error);
+      .catch((error) => {
+        console.error("Error deleting gallery image from Cloudinary:", error);
       });
 
     revalidatePath("/admin/dashboard/schemes");
     return { success: true, message: "Gallery image removed successfully!" };
   } catch (error: any) {
     console.log("Error removing gallery image: ", error);
-    return { success: false, message: error.message || "Failed to remove gallery image" };
+    return {
+      success: false,
+      message: error.message || "Failed to remove gallery image",
+    };
   }
 };
 

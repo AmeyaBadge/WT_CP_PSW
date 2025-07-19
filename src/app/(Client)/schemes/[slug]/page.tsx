@@ -5,15 +5,15 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { 
-  Calendar, 
-  ExternalLink, 
-  FileText, 
-  Users, 
+import {
+  Calendar,
+  ExternalLink,
+  FileText,
+  Users,
   Building2,
   ArrowLeft,
   Clock,
-  CheckCircle
+  CheckCircle,
 } from "lucide-react";
 import { Metadata } from "next";
 
@@ -21,7 +21,9 @@ interface SchemeDetailsPageProps {
   params: Promise<{ slug: string }>;
 }
 
-export async function generateMetadata({ params }: SchemeDetailsPageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: SchemeDetailsPageProps): Promise<Metadata> {
   const { slug } = await params;
   const scheme = await getPublicSchemeBySlug(slug);
 
@@ -47,7 +49,7 @@ const SchemeDetailsPage = async ({ params }: SchemeDetailsPageProps) => {
 
   const typeColors = {
     Central: "bg-red-100 text-red-800",
-    State: "bg-blue-100 text-blue-800", 
+    State: "bg-blue-100 text-blue-800",
     Local: "bg-green-100 text-green-800",
   };
 
@@ -78,9 +80,18 @@ const SchemeDetailsPage = async ({ params }: SchemeDetailsPageProps) => {
               {scheme.type} Scheme
             </Badge>
             {scheme.deadline && (
-              <div className="flex items-center text-sm text-gray-600">
-                <Clock className="mr-1 h-4 w-4" />
-                Deadline: {new Date(scheme.deadline).toLocaleDateString()}
+              <div className="flex flex-col gap-1">
+                <div
+                  className={`flex items-center text-sm ${new Date(scheme.deadline) < new Date() ? "text-red-600" : "text-gray-600"}`}
+                >
+                  <Clock className="mr-1 h-4 w-4" />
+                  Deadline: {new Date(scheme.deadline).toLocaleDateString()}
+                </div>
+                {new Date(scheme.deadline) < new Date() && (
+                  <Badge variant="destructive" className="w-fit">
+                    Deadline Expired
+                  </Badge>
+                )}
               </div>
             )}
           </div>
@@ -90,7 +101,7 @@ const SchemeDetailsPage = async ({ params }: SchemeDetailsPageProps) => {
         <div className="flex items-center gap-2 text-sm text-gray-600">
           <Building2 className="h-4 w-4" />
           <span>Department: </span>
-          <Link 
+          <Link
             href={`/departments/${scheme.department.slug}`}
             className="text-govt-blue hover:underline font-medium"
           >
@@ -118,7 +129,9 @@ const SchemeDetailsPage = async ({ params }: SchemeDetailsPageProps) => {
 
           {/* Description */}
           <Card className="p-6">
-            <h3 className="text-xl font-semibold mb-4 text-govt-blue">About This Scheme</h3>
+            <h3 className="text-xl font-semibold mb-4 text-govt-blue">
+              About This Scheme
+            </h3>
             <div className="prose max-w-none">
               <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
                 {scheme.description}
@@ -189,10 +202,15 @@ const SchemeDetailsPage = async ({ params }: SchemeDetailsPageProps) => {
           {/* Gallery Images */}
           {scheme.images && scheme.images.length > 0 && (
             <Card className="p-6">
-              <h3 className="text-xl font-semibold mb-4 text-govt-blue">Gallery</h3>
+              <h3 className="text-xl font-semibold mb-4 text-govt-blue">
+                Gallery
+              </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {scheme.images.map((image) => (
-                  <div key={image.id} className="relative h-48 w-full rounded-lg overflow-hidden">
+                  <div
+                    key={image.id}
+                    className="relative h-48 w-full rounded-lg overflow-hidden"
+                  >
                     <Image
                       src={image.url}
                       alt={`${scheme.name} gallery image`}
@@ -210,20 +228,33 @@ const SchemeDetailsPage = async ({ params }: SchemeDetailsPageProps) => {
         <div className="space-y-6">
           {/* Quick Actions */}
           <Card className="p-6">
-            <h3 className="text-lg font-semibold mb-4 text-govt-blue">Quick Actions</h3>
+            <h3 className="text-lg font-semibold mb-4 text-govt-blue">
+              Quick Actions
+            </h3>
             <div className="space-y-3">
               {scheme.applyLink && (
-                <Button asChild className="w-full bg-govt-blue hover:bg-govt-blue/90">
-                  <a href={scheme.applyLink} target="_blank" rel="noopener noreferrer">
+                <Button
+                  asChild
+                  className="w-full bg-govt-blue hover:bg-govt-blue/90"
+                >
+                  <a
+                    href={scheme.applyLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <ExternalLink className="mr-2 h-4 w-4" />
                     Apply Online
                   </a>
                 </Button>
               )}
-              
+
               {scheme.applicationFormLink && (
                 <Button asChild variant="outline" className="w-full">
-                  <a href={scheme.applicationFormLink} target="_blank" rel="noopener noreferrer">
+                  <a
+                    href={scheme.applicationFormLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <FileText className="mr-2 h-4 w-4" />
                     Download Form
                   </a>
@@ -241,7 +272,9 @@ const SchemeDetailsPage = async ({ params }: SchemeDetailsPageProps) => {
 
           {/* Scheme Info */}
           <Card className="p-6">
-            <h3 className="text-lg font-semibold mb-4 text-govt-blue">Scheme Information</h3>
+            <h3 className="text-lg font-semibold mb-4 text-govt-blue">
+              Scheme Information
+            </h3>
             <div className="space-y-3 text-sm">
               <div className="flex justify-between">
                 <span className="text-gray-600">Type:</span>
@@ -249,18 +282,25 @@ const SchemeDetailsPage = async ({ params }: SchemeDetailsPageProps) => {
                   {scheme.type}
                 </Badge>
               </div>
-              
+
               <div className="flex justify-between">
                 <span className="text-gray-600">Department:</span>
                 <span className="font-medium">{scheme.department.name}</span>
               </div>
 
               {scheme.deadline && (
-                <div className="flex justify-between">
+                <div className="flex justify-between items-start">
                   <span className="text-gray-600">Deadline:</span>
-                  <span className="font-medium">
-                    {new Date(scheme.deadline).toLocaleDateString()}
-                  </span>
+                  <div className="flex flex-col items-end gap-1">
+                    <span
+                      className={`font-medium ${new Date(scheme.deadline) < new Date() ? "text-red-600" : ""}`}
+                    >
+                      {new Date(scheme.deadline).toLocaleDateString()}
+                    </span>
+                    {new Date(scheme.deadline) < new Date() && (
+                      <span className="text-xs text-red-600">Expired</span>
+                    )}
+                  </div>
                 </div>
               )}
             </div>
@@ -268,14 +308,14 @@ const SchemeDetailsPage = async ({ params }: SchemeDetailsPageProps) => {
 
           {/* Help */}
           <Card className="p-6 bg-gray-50">
-            <h3 className="text-lg font-semibold mb-2 text-govt-blue">Need Help?</h3>
+            <h3 className="text-lg font-semibold mb-2 text-govt-blue">
+              Need Help?
+            </h3>
             <p className="text-sm text-gray-600 mb-3">
               Contact the respective department for assistance with this scheme.
             </p>
             <Button asChild variant="outline" size="sm" className="w-full">
-              <Link href="/contact">
-                Contact Us
-              </Link>
+              <Link href="/contact">Contact Us</Link>
             </Button>
           </Card>
         </div>

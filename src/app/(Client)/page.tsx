@@ -1,4 +1,8 @@
-import { getPublicAnnouncements, getFeaturedSchemes, getPublicDepartments } from "@/actions/public/public.action";
+import {
+  getPublicAnnouncements,
+  getFeaturedSchemes,
+  getPublicDepartments,
+} from "@/actions/public/public.action";
 import Announcements from "@/components/Announcements";
 import AnnouncementTicker from "@/components/AnnouncementTicker";
 import MemberCard from "@/components/MemberCard";
