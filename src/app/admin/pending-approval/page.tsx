@@ -2,8 +2,17 @@ import React from "react";
 import Link from "next/link";
 import "@/app/globals.css";
 import Image from "next/image";
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
+import { checkApproval } from "@/actions/admin/user.action";
 
-const Unauthorized = () => {
+const Unauthorized = async () => {
+  const { userId, sessionClaims } = await auth();
+  if (!userId) redirect("/admin/login");
+
+  const approved = sessionClaims.metadata.approved;
+  if (approved) redirect("/admin/dashboard");
+
   return (
     <div className="min-h-screen flex flex-col bg-govt-extra-light">
       {/* <Header /> */}
