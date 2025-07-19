@@ -1,4 +1,8 @@
-import { getAllUsers, isAdmin } from "@/actions/admin/user.action";
+import {
+  checkApproval,
+  getAllUsers,
+  isAdmin,
+} from "@/actions/admin/user.action";
 import { Heading } from "@/components/admin/Heading";
 import { Separator } from "@/components/ui/separator";
 import { redirect } from "next/navigation";
@@ -26,6 +30,8 @@ function transformData(inputArray: Awaited<ReturnType<typeof getAllUsers>>) {
 const ManageUsers = async () => {
   // Protect the page from users who are not admins
   if (!(await isAdmin())) redirect("/403");
+
+  await checkApproval();
 
   const rawUsers = await getAllUsers();
   const approvedUsers = rawUsers.filter((user) => user.approved);
