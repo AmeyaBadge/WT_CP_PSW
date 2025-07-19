@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { LoaderCircle, Send } from "lucide-react";
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import {
   Select,
   SelectContent,
@@ -21,24 +21,44 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { inviteUser } from "@/actions/admin/user.action";
+import { getDepartments } from "@/actions/admin/scheme.action";
 import { Separator } from "@/components/ui/separator";
 import toast from "react-hot-toast";
+
+interface Department {
+  id: string;
+  name: string;
+}
 
 const InviteUserDialog = () => {
   const [email, setEmail] = useState("");
   const [inviteDepartment, setInviteDepartment] = useState("");
+  const [departments, setDepartments] = useState<Department[]>([]);
   const [open, setOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
+
+  useEffect(() => {
+    const fetchDepartments = async () => {
+      try {
+        const deps = await getDepartments();
+        setDepartments(deps);
+      } catch (error) {
+        console.error("Failed to fetch departments:", error);
+        toast.error("Failed to load departments");
+      }
+    };
+    fetchDepartments();
+  }, []);
 
   const handleInvite = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!email.trim()) return;
+    if (!email.trim() || !inviteDepartment) return;
 
     startTransition(async () => {
       const result = await inviteUser({
         email,
-        department: inviteDepartment,
+        departmentId: inviteDepartment,
       });
 
       if (result?.success) {
@@ -86,13 +106,18 @@ const InviteUserDialog = () => {
                   value={inviteDepartment}
                   onValueChange={(val) => setInviteDepartment(val)}
                 >
-                  <SelectTrigger className="w-[180px]">
-                    <SelectValue id="inviteDepartment" placeholder="Select" />
+                  <SelectTrigger className="w-full">
+                    <SelectValue
+                      id="inviteDepartment"
+                      placeholder="Select a department"
+                    />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="Alert">Alert</SelectItem>
-                    <SelectItem value="Update">Update</SelectItem>
-                    <SelectItem value="Notice">Notice</SelectItem>
+                    {departments.map((dept) => (
+                      <SelectItem key={dept.id} value={dept.id}>
+                        {dept.name}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>

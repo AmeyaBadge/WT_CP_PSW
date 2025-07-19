@@ -231,7 +231,7 @@ export const createScheme = async (formData: FormData) => {
     const slug = await generateUniqueSchemeSlug(name);
 
     // Create scheme with gallery images in transaction
-    const scheme = await prisma.$transaction(async (tx) => {
+    const _scheme = await prisma.$transaction(async (tx) => {
       const newScheme = await tx.scheme.create({
         data: {
           name,
@@ -269,11 +269,11 @@ export const createScheme = async (formData: FormData) => {
 
     revalidatePath("/admin/dashboard/schemes");
     return { success: true, message: "Scheme created successfully!" };
-  } catch (error: any) {
+  } catch (error) {
     console.log("Error creating scheme: ", error);
     return {
       success: false,
-      message: error.message || "Failed to create scheme",
+      message: error || "Failed to create scheme",
     };
   }
 };
@@ -407,11 +407,11 @@ export const updateScheme = async (id: string, formData: FormData) => {
     revalidatePath("/admin/dashboard/schemes");
     revalidatePath(`/admin/dashboard/schemes/${id}`);
     return { success: true, message: "Scheme updated successfully!" };
-  } catch (error: any) {
+  } catch (error) {
     console.log("Error updating scheme: ", error);
     return {
       success: false,
-      message: error.message || "Failed to update scheme",
+      message: error || "Failed to update scheme",
     };
   }
 };
@@ -461,11 +461,11 @@ export const deleteScheme = async (id: string) => {
 
     revalidatePath("/admin/dashboard/schemes");
     return { success: true, message: "Scheme deleted successfully!" };
-  } catch (error: any) {
+  } catch (error) {
     console.log("Error deleting scheme: ", error);
     return {
       success: false,
-      message: error.message || "Failed to delete scheme",
+      message: error || "Failed to delete scheme",
     };
   }
 };
@@ -524,11 +524,11 @@ export const removeGalleryImage = async (imageId: string) => {
 
     revalidatePath("/admin/dashboard/schemes");
     return { success: true, message: "Gallery image removed successfully!" };
-  } catch (error: any) {
+  } catch (error) {
     console.log("Error removing gallery image: ", error);
     return {
       success: false,
-      message: error.message || "Failed to remove gallery image",
+      message: error || "Failed to remove gallery image",
     };
   }
 };

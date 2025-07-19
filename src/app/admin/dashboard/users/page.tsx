@@ -31,8 +31,6 @@ const ManageUsers = async () => {
   // Protect the page from users who are not admins
   if (!(await isAdmin())) redirect("/403");
 
-  await checkApproval();
-
   const rawUsers = await getAllUsers();
   const approvedUsers = rawUsers.filter((user) => user.approved);
   const unapprovedUsers = rawUsers.filter((user) => !user.approved);

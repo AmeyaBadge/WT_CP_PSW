@@ -7,6 +7,7 @@ import { notFound } from "next/navigation";
 import UpdateDepartmentForm from "./components/UpdateDepartmentForm";
 import { updateDepartment } from "@/actions/admin/department.action";
 import { Metadata } from "next";
+import { checkApproval } from "@/actions/admin/user.action";
 
 interface PageProps {
   params: {
@@ -28,6 +29,8 @@ export async function generateMetadata({
 }
 
 export default async function DepartmentPage({ params }: PageProps) {
+  await checkApproval();
+
   const deptId = (await params).id;
   const department = await getDepartmentById(deptId);
 

@@ -12,9 +12,11 @@ import Link from "next/link";
 import AdminDepartmentCard from "@/components/admin/AdminDepartmentCard";
 import { Heading } from "@/components/admin/Heading";
 import { Separator } from "@/components/ui/separator";
-import { isAdmin } from "@/actions/admin/user.action";
+import { checkApproval, isAdmin } from "@/actions/admin/user.action";
 
 const DepartmentsPage = async () => {
+  await checkApproval();
+
   const departments = await getAllDepartments();
   const admin = await isAdmin();
 

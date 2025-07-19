@@ -81,7 +81,7 @@ export const approveUser = async (dbId: string, _formData: FormData) => {
       },
     });
 
-    const res = await client.users.updateUserMetadata(user.clerkId, {
+    const _res = await client.users.updateUserMetadata(user.clerkId, {
       publicMetadata: {
         approved: true,
       },
@@ -97,7 +97,7 @@ export const approveUser = async (dbId: string, _formData: FormData) => {
 
 export const syncUser = async () => {
   try {
-    const { userId } = await auth();
+    const { userId, sessionClaims } = await auth();
     const user = await currentUser();
 
     if (!userId || !user) return;
@@ -117,6 +117,8 @@ export const syncUser = async () => {
         name: `${user.firstName || ""} ${user.lastName || ""}`,
         email: user.emailAddresses[0].emailAddress,
         image: user.imageUrl,
+        departmentId: sessionClaims.metadata.departmentId,
+        approved: sessionClaims.metadata.approved,
       },
     });
 
@@ -203,10 +205,10 @@ export const getAllUsers = async (onlyUnapproved: boolean = false) => {
 
 export const inviteUser = async ({
   email,
-  department,
+  departmentId,
 }: {
   email: string;
-  department: string;
+  departmentId: string;
 }) => {
   // const email = formData.get("inviteEmail");
   // const department = formData.get("inviteDepartment");
@@ -231,7 +233,7 @@ export const inviteUser = async ({
       publicMetadata: {
         role: "moderator",
         approved: false,
-        // ToDo : Add Department ID as well
+        departmentId: departmentId,
       },
     });
 
