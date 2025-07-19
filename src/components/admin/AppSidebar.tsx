@@ -2,6 +2,7 @@ import {
   Calendar,
   FolderTree,
   Home,
+  LayoutList,
   LogOutIcon,
   Megaphone,
   Search,
@@ -50,6 +51,12 @@ const items = [
     url: "/admin/dashboard/departments",
     icon: FolderTree,
   },
+  {
+    title: "Schemes",
+    url: "/admin/dashboard/schemes",
+    icon: LayoutList,
+  },
+  
 ];
 
 export const AppSidebar = async () => {

@@ -8,6 +8,7 @@ declare global {
     metadata: {
       role: Roles;
       approved: boolean;
+      departmentId?: string;
     };
   }
 }

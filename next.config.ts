@@ -13,7 +13,7 @@ const nextConfig: NextConfig = {
   }
 ],
 images: {
-  remotePatterns: [{protocol: 'https', hostname:'www.maharashtra.gov.in'}]
+  remotePatterns: [{protocol: 'https', hostname:'res.cloudinary.com'}]
 }
 };
 

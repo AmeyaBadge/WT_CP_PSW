@@ -7,7 +7,7 @@ export const getCurrentUserDepartmentId = async () => {
     const { userId, sessionClaims } = await auth();
     if (!userId) throw new Error("Unauthorized access!");
 
-    return sessionClaims.metadata.departmentId;
+    return sessionClaims?.metadata?.departmentId;
   } catch (error) {
     console.log("Error getting user's departmentId : ", error);
     return;
