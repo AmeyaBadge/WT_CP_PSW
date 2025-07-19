@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "../src/generated/prisma"
@@ -15,19 +9,16 @@ datasource db {
 }
 
 model User {
-  id           String  @id @default(cuid())
-  clerkId      String  @unique
-  name         String
-  email        String  @unique
-  image        String
-  departmentId String?
-  approved     Boolean @default(false)
-
-  createdAt DateTime @default(now())
-
-  //Relations
+  id            String         @id @default(cuid())
+  clerkId       String         @unique
+  name          String
+  email         String         @unique
+  image         String
+  createdAt     DateTime       @default(now())
+  departmentId  String?
+  approved      Boolean        @default(false)
   announcements Announcement[]
-  department    Department?    @relation(fields: [departmentId], references: [id]) // one-to-one relation
+  department    Department?    @relation(fields: [departmentId], references: [id])
 }
 
 model Announcement {
@@ -37,30 +28,19 @@ model Announcement {
   title     String
   content   String?
   createdAt DateTime         @default(now())
-
-  // Relation
-  creator User @relation(fields: [creatorId], references: [id], onDelete: Cascade)
-}
-
-enum AnnouncementType {
-  Alert
-  Notice
-  Update
+  creator   User             @relation(fields: [creatorId], references: [id], onDelete: Cascade)
 }
 
 model Department {
-  id          String @id @default(cuid())
-  slug        String @unique
-  name        String @unique
+  id          String    @id @default(cuid())
+  slug        String    @unique
+  name        String    @unique
   image       String
   description String
   contact     String
-
-  //Relations
-  // hierarchy User[]
-  images     Gallery[]
-  schemes    Scheme[]
-  moderators User[]
+  images      Gallery[]
+  schemes     Scheme[]
+  moderators  User[]
 }
 
 model Gallery {
@@ -69,15 +49,8 @@ model Gallery {
   type         GalleryType
   departmentId String?
   schemeId     String?
-
-  // Relations
-  department Department? @relation(fields: [departmentId], references: [id], onDelete: Cascade)
-  scheme     Scheme?     @relation(fields: [schemeId], references: [id], onDelete: Cascade)
-}
-
-enum GalleryType {
-  Department
-  Scheme
+  department   Department? @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+  scheme       Scheme?     @relation(fields: [schemeId], references: [id], onDelete: Cascade)
 }
 
 model Scheme {
@@ -97,13 +70,22 @@ model Scheme {
   documentsReq        String?
   applyLink           String?
   applicationFormLink String?
-
-  // Relations
-  // faqs FAQ[]
-  images     Gallery[]
-  department Department @relation(fields: [departmentId], references: [id])
+  createdAt           DateTime   @default(now())
+  images              Gallery[]
+  department          Department @relation(fields: [departmentId], references: [id])
 
   @@index([slug])
+}
+
+enum AnnouncementType {
+  Alert
+  Notice
+  Update
+}
+
+enum GalleryType {
+  Department
+  Scheme
 }
 
 enum SchemeType {

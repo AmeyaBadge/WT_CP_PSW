@@ -24,15 +24,17 @@ export function CoverImageUpload({
       console.log("Cover image uploaded successfully:", result.info.secure_url);
       onChange(result.info.secure_url);
       setIsUploading(false);
-      
+
       // Force cleanup of any modal overlays
       setTimeout(() => {
-        const overlays = document.querySelectorAll('.cloudinary-widget-overlay, .cld-overlay, [data-testid="cloudinary-overlay"]');
-        overlays.forEach(overlay => overlay.remove());
-        
+        const overlays = document.querySelectorAll(
+          '.cloudinary-widget-overlay, .cld-overlay, [data-testid="cloudinary-overlay"]'
+        );
+        overlays.forEach((overlay) => overlay.remove());
+
         // Re-enable body scroll
-        document.body.style.overflow = '';
-        document.documentElement.style.overflow = '';
+        document.body.style.overflow = "";
+        document.documentElement.style.overflow = "";
       }, 100);
     }
   };
@@ -84,25 +86,29 @@ export function CoverImageUpload({
             onError={(error) => {
               console.error("Cover image upload error:", error);
               setIsUploading(false);
-              
+
               // Force cleanup on error too
               setTimeout(() => {
-                const overlays = document.querySelectorAll('.cloudinary-widget-overlay, .cld-overlay, [data-testid="cloudinary-overlay"]');
-                overlays.forEach(overlay => overlay.remove());
-                document.body.style.overflow = '';
-                document.documentElement.style.overflow = '';
+                const overlays = document.querySelectorAll(
+                  '.cloudinary-widget-overlay, .cld-overlay, [data-testid="cloudinary-overlay"]'
+                );
+                overlays.forEach((overlay) => overlay.remove());
+                document.body.style.overflow = "";
+                document.documentElement.style.overflow = "";
               }, 100);
             }}
             onOpen={() => setIsUploading(true)}
             onClose={() => {
               setIsUploading(false);
-              
+
               // Force cleanup when widget closes
               setTimeout(() => {
-                const overlays = document.querySelectorAll('.cloudinary-widget-overlay, .cld-overlay, [data-testid="cloudinary-overlay"]');
-                overlays.forEach(overlay => overlay.remove());
-                document.body.style.overflow = '';
-                document.documentElement.style.overflow = '';
+                const overlays = document.querySelectorAll(
+                  '.cloudinary-widget-overlay, .cld-overlay, [data-testid="cloudinary-overlay"]'
+                );
+                overlays.forEach((overlay) => overlay.remove());
+                document.body.style.overflow = "";
+                document.documentElement.style.overflow = "";
               }, 100);
             }}
           >
