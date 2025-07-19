@@ -116,7 +116,7 @@ const Header = () => {
 
             {/* Language Switcher */}
             <div className="hidden md:block ml-10">
-              <LanguageSwitcher />
+              {/* <LanguageSwitcher /> */}
             </div>
           </div>
         </div>
@@ -172,9 +172,7 @@ const Header = () => {
             }}
             className="w-full flex justify-center"
           >
-            <div className="mt-4">
-              <LanguageSwitcher />
-            </div>
+            <div className="mt-4">{/* <LanguageSwitcher /> */}</div>
           </li>
         </ul>
       </div>

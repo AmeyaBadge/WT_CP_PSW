@@ -1,6 +1,8 @@
 import {
   Calendar,
+  FolderTree,
   Home,
+  LayoutList,
   LogOutIcon,
   Megaphone,
   Search,
@@ -45,20 +47,16 @@ const items = [
     icon: Megaphone,
   },
   {
-    title: "Calendar",
-    url: "#",
-    icon: Calendar,
+    title: "Departments",
+    url: "/admin/dashboard/departments",
+    icon: FolderTree,
   },
   {
-    title: "Search",
-    url: "#",
-    icon: Search,
+    title: "Schemes",
+    url: "/admin/dashboard/schemes",
+    icon: LayoutList,
   },
-  {
-    title: "Settings",
-    url: "#",
-    icon: Settings,
-  },
+  
 ];
 
 export const AppSidebar = async () => {

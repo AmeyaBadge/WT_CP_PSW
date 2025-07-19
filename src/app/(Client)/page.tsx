@@ -1,4 +1,8 @@
-import { getLatestAnnouncements } from "@/actions/client/announcement.action";
+import {
+  getPublicAnnouncements,
+  getFeaturedSchemes,
+  getPublicDepartments,
+} from "@/actions/public/public.action";
 import Announcements from "@/components/Announcements";
 import AnnouncementTicker from "@/components/AnnouncementTicker";
 import MemberCard from "@/components/MemberCard";
@@ -8,142 +12,23 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { Suspense } from "react";
 
-const schemes = [
-  {
-    id: "pm-awas-yojana",
-    title: "Pradhan Mantri Awas Yojana",
-    titleMarathi: "प्रधानमंत्री आवास योजना",
-    type: "central",
-    department: "Rural Development",
-    departmentMarathi: "ग्रामीण विकास",
-    description:
-      "Housing for all by 2024 with pucca house to all eligible beneficiaries.",
-    descriptionMarathi:
-      "पात्र लाभार्थ्यांना २०२४ पर्यंत पक्के घर देण्याची योजना.",
-    detailedDescription:
-      "The Pradhan Mantri Awas Yojana (PMAY) provides financial assistance for construction of houses to eligible beneficiaries from economically weaker sections in rural areas. The scheme provides Rs. 1.20 lakh in plain areas and Rs. 1.30 lakh in hilly/difficult areas per unit.",
-    detailedDescriptionMarathi:
-      "प्रधानमंत्री आवास योजनेत ग्रामीण भागातील आर्थिकदृष्ट्या दुर्बल घटकातील लोकांना घर बांधण्यासाठी आर्थिक मदत दिली जाते. या योजनेत साध्या भागात १.२० लाख रुपये आणि डोंगराळ/अवघड भागात १.३० लाख रुपये प्रति युनिट दिले जातात.",
-    image: "/assets/schemes/pmay.jpg",
-    eligibility: "Families with annual income up to ₹3 lakhs",
-    eligibilityMarathi: "वार्षिक उत्पन्न ३ लाख रुपयांपर्यंत असलेले कुटुंब",
-    benefits: [
-      "Financial assistance of up to ₹1.5 lakhs for construction",
-      "Subsidy on home loan interest rates",
-      "Preference to women, SC/ST, and minority communities",
-    ],
-    benefitsMarathi: [
-      "बांधकामासाठी १.५ लाख रुपये पर्यंत आर्थिक मदत",
-      "गृहकर्जावरील व्याजदरावर सबसिडी",
-      "महिला, अनुसूचित जाती/जमाती आणि अल्पसंख्याक समुदायांना प्राधान्य",
-    ],
-    applicationSteps: [
-      "Visit the official PMAY website or Gram Panchayat office",
-      "Fill the application form with required details",
-      "Attach necessary documents",
-      "Submit to concerned authority",
-    ],
-    applicationStepsMarathi: [
-      "अधिकृत पीएमएवाय वेबसाइट किंवा ग्रामपंचायत कार्यालय भेट द्या",
-      "आवश्यक तपशीलांसह अर्ज भरा",
-      "आवश्यक कागदपत्रे संलग्न करा",
-      "संबंधित प्राधिकरणाकडे सादर करा",
-    ],
-    documentsRequired: [
-      "Aadhaar Card",
-      "Income Certificate",
-      "Caste Certificate (if applicable)",
-      "Bank Account Details",
-      "Land ownership documents",
-    ],
-    documentsRequiredMarathi: [
-      "आधार कार्ड",
-      "उत्पन्न दाखला",
-      "जात प्रमाणपत्र (असल्यास)",
-      "बँक खाते तपशील",
-      "जमीन मालकीची कागदपत्रे",
-    ],
-    deadline: "31-12-2024",
-    applyLink: "https://pmaymis.gov.in",
-    faqs: [
-      {
-        question: "Who is eligible for PMAY?",
-        questionMarathi: "पीएमएवाय साठी कोण पात्र आहे?",
-        answer:
-          "Families with annual income up to ₹3 lakhs are eligible under this scheme.",
-        answerMarathi:
-          "वार्षिक उत्पन्न ३ लाख रुपयांपर्यंत असलेली कुटुंबे या योजनेअंतर्गत पात्र आहेत.",
-      },
-    ],
-  },
-  // Add more schemes...
-];
-
-const departments = [
-  {
-    id: "rural-development",
-    name: "Rural Development",
-    description:
-      "Responsible for implementing rural development schemes and infrastructure projects.",
-    detailedDescription:
-      "The Rural Development Department of Panchayat Samiti Wai oversees the implementation of various central and state government schemes aimed at improving rural infrastructure, livelihood opportunities, and quality of life in villages under its jurisdiction. The department works closely with Gram Panchayats to identify needs and execute development projects.",
-    image: "/assets/departments/rural-dev.jpg",
-    phone: "02162-234567",
-    email: "rural_dev@wai.gov.in",
-    schemesCount: 8,
-    hierarchy: [
-      {
-        title: "Block Development Officer",
-        name: "Shri. Vikram Joshi",
-        children: [
-          {
-            title: "Assistant BDO",
-            name: "Smt. Priya Kale",
-            children: [
-              {
-                title: "Gram Sevak",
-                name: "Shri. Raju Patil",
-              },
-              {
-                title: "Extension Officer",
-                name: "Smt. Meena Deshpande",
-              },
-            ],
-          },
-          {
-            title: "Accountant",
-            name: "Shri. Sanjay Pawar",
-          },
-        ],
-      },
-      // ... other top-level positions ...
-    ],
-    gallery: [
-      "/images/gallery/rural1.jpg",
-      "/images/gallery/rural2.jpg",
-      // More images...
-    ],
-  },
-  // More departments...
-];
-
-type AnnouncementType = Awaited<ReturnType<typeof getLatestAnnouncements>>[0];
+type AnnouncementType = Awaited<ReturnType<typeof getPublicAnnouncements>>[0];
 
 const Ticker = async () => {
-  const data: AnnouncementType[] = await getLatestAnnouncements();
+  const data: AnnouncementType[] = await getPublicAnnouncements(5);
   return <AnnouncementTicker announcements={data} />;
 };
+
 const AnnouncementsRender = async () => {
-  const data: AnnouncementType[] = await getLatestAnnouncements();
+  const data: AnnouncementType[] = await getPublicAnnouncements(3);
   return <Announcements announcements={data} />;
 };
 
-const featuredSchemes = schemes.slice(0, 3);
-const featuredDepartments = departments.slice(0, 3);
-
 const page = async () => {
-  // const { db } = await connectToDatabase();
-  // const data: Announcement[] = db.collection("");
+  // Fetch dynamic data
+  const featuredSchemes = await getFeaturedSchemes(3);
+  const featuredDepartments = await getPublicDepartments();
+  const recentAnnouncements = await getPublicAnnouncements(5);
 
   return (
     <>
@@ -253,11 +138,11 @@ const page = async () => {
             {featuredSchemes.map((scheme) => (
               <SchemeCard
                 key={scheme.id}
-                schemeId={scheme.id}
-                title={scheme.title}
-                department={scheme.department}
-                description={scheme.description}
-                image={scheme.image}
+                schemeId={scheme.slug}
+                title={scheme.name}
+                department={scheme.department.name}
+                description={scheme.shortDesc}
+                image={scheme.image || "/assets/schemes/default.jpg"}
               />
             ))}
           </div>
@@ -289,7 +174,7 @@ const page = async () => {
             </Link>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
-            {featuredDepartments.map((dept) => (
+            {featuredDepartments.slice(0, 3).map((dept) => (
               <div
                 key={dept.id}
                 className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200"
@@ -302,7 +187,7 @@ const page = async () => {
                     {dept.description}
                   </p>
                   <Link
-                    href={`/departments/${dept.id}`}
+                    href={`/departments/${dept.slug}`}
                     className="text-govt-saffron font-semibold hover:underline"
                     aria-label={`Learn more about ${dept.name} department`}
                   >
