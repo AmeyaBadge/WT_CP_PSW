@@ -17,7 +17,7 @@ export default clerkMiddleware(async (auth, req) => {
   const approved = sessionClaims?.metadata.approved;
 
   // If logged in but not authorized
-  if ((role !== "admin" && role !== "moderator") || approved !== true) {
+  if (role !== "admin" && role !== "moderator") {
     return NextResponse.redirect(new URL("/403", req.url));
   }
 

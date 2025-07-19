@@ -9,6 +9,7 @@ import { AnnouncementDataTable } from "./data-table";
 import { announcementColumns } from "./columns";
 import { AnnouncementType } from "@/generated/prisma";
 import CreateAnnouncementDialog from "@/components/admin/CreateAnnouncementDialog";
+import { checkApproval } from "@/actions/admin/user.action";
 
 export const metadata: Metadata = {
   title: "Announcements",
@@ -38,6 +39,8 @@ function transformData(
 }
 
 const AnnouncmenetsPage = async () => {
+  await checkApproval();
+
   const data = await getAllAnnouncements();
   const announcements = transformData(data);
 

@@ -4,11 +4,18 @@ import prisma from "@/lib/prisma";
 import { checkRole } from "@/lib/roles";
 import { auth, clerkClient, currentUser } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 const client = await clerkClient();
 
 export const isAdmin = async () => {
   return await checkRole("admin");
+};
+
+export const checkApproval = async () => {
+  const { sessionClaims } = await auth();
+  const approved = sessionClaims?.metadata.approved;
+  if (!approved) redirect("/admin/pending-approval");
 };
 
 export const setRole = async (formData: FormData) => {
