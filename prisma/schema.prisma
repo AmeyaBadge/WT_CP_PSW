@@ -70,9 +70,14 @@ model Scheme {
   documentsReq        String?
   applyLink           String?
   applicationFormLink String?
-  createdAt           DateTime   @default(now())
-  images              Gallery[]
-  department          Department @relation(fields: [departmentId], references: [id])
+
+  createdAt          DateTime   @default(now())
+
+  // Relations
+  // faqs FAQ[]
+  images     Gallery[]
+  department Department @relation(fields: [departmentId], references: [id])
+
 
   @@index([slug])
 }

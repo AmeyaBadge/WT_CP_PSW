@@ -38,6 +38,7 @@ export async function generateMetadata({ params }: DepartmentDetailsPageProps): 
 
 const DepartmentDetailsPage = async ({ params }: DepartmentDetailsPageProps) => {
   const { slug } = await params;
+  console.log("Fetching department with slug:", slug);
   const department = await getPublicDepartmentBySlug(slug);
 
   if (!department) {

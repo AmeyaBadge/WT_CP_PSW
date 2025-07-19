@@ -2,11 +2,14 @@ import Image from "next/image";
 import Link from "next/link";
 
 export type DepartmentCard = {
+  slug : string;
+
   image: string;
   name: string;
   description: string;
   id: string;
   schemesCount: number;
+  contact: string;
 };
 
 const DepartmentCard = ({ department }: { department: DepartmentCard }) => {
@@ -29,7 +32,7 @@ const DepartmentCard = ({ department }: { department: DepartmentCard }) => {
         </p>
         <div className="flex justify-between items-center">
           <Link
-            href={`/departments/${department.id}`}
+            href={`/departments/${department.slug}`}
             className="text-govt-saffron font-semibold hover:underline"
             aria-label={`View ${department.name} department`}
           >
