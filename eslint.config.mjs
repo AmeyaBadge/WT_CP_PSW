@@ -52,6 +52,7 @@ const eslintConfig = [
     extends: ["next/core-web-vitals", "next/typescript"],
     rules: {
       "@typescript-eslint/no-unused-vars": "warn",
+      "react/no-unescaped-entities": "warn",
     },
     ignorePatterns: [
       "node_modules/**",

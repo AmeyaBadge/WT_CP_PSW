@@ -1,6 +1,6 @@
 "use client";
 
-import { removeRole } from "@/actions/admin/user.action";
+import { revokeUser } from "@/actions/admin/user.action";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,7 +21,7 @@ const RevokeUserButton = ({ dbId }: { dbId: string }) => {
 
   const handleSubmit = () => {
     startTransition(async () => {
-      await removeRole(dbId);
+      await revokeUser(dbId);
       // Optional: reload or revalidate
       window.location.reload(); // if you want full reload
       // OR use router.refresh() if using next/navigation
@@ -50,7 +50,7 @@ const RevokeUserButton = ({ dbId }: { dbId: string }) => {
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            This will revoke the user's approval and they will no longer be
+            This will revoke the user&apos;s approval and they will no longer be
             authorized.
           </AlertDialogDescription>
         </AlertDialogHeader>

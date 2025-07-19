@@ -3,16 +3,15 @@
 import prisma from "@/lib/prisma";
 import { checkRole } from "@/lib/roles";
 import { auth, clerkClient, currentUser } from "@clerk/nextjs/server";
-import { error } from "console";
 import { revalidatePath } from "next/cache";
+
+const client = await clerkClient();
 
 export const isAdmin = async () => {
   return await checkRole("admin");
 };
 
 export const setRole = async (formData: FormData) => {
-  const client = await clerkClient();
-
   // Check that the user trying to set the role is an admin
   if (!checkRole("admin")) {
     return { message: "Not Authorized" };
@@ -32,7 +31,7 @@ export const setRole = async (formData: FormData) => {
 };
 
 // Change the role in metadata and remove the department from the user table record
-export const removeRole = async (dbId: string) => {
+export const revokeUser = async (dbId: string) => {
   try {
     if (!(await isAdmin())) throw new Error("Unauthorized access.");
     if (!dbId) throw new Error("Id required");
@@ -49,10 +48,8 @@ export const removeRole = async (dbId: string) => {
 
     const clerkId = modifiedUser.clerkId;
 
-    const client = await clerkClient();
-
     const _res = await client.users.updateUserMetadata(clerkId, {
-      publicMetadata: { role: null },
+      publicMetadata: { approved: false },
     });
 
     revalidatePath("/");
@@ -68,11 +65,17 @@ export const approveUser = async (dbId: string, _formData: FormData) => {
 
     if (!dbId) throw new Error("Id required");
 
-    const _user = await prisma.user.update({
+    const user = await prisma.user.update({
       where: {
         id: dbId,
       },
       data: {
+        approved: true,
+      },
+    });
+
+    const res = await client.users.updateUserMetadata(user.clerkId, {
+      publicMetadata: {
         approved: true,
       },
     });
@@ -136,13 +139,32 @@ export const getDbUserId = async () => {
   return user.id;
 };
 
-export const getAllUsers = async () => {
+export const getAllUsers = async (onlyUnapproved: boolean = false) => {
   try {
     const admin = await isAdmin();
     if (!admin) throw new Error("Unauthorized access!");
 
     const dbUserId = await getDbUserId();
     if (!dbUserId) throw new Error("Unauthenticated access not allowed.");
+
+    // const users = await prisma.user.findMany({
+    //   select: {
+    //     id: true,
+    //     image: true,
+    //     name: true,
+    //     email: true,
+    //     approved: true,
+    //     department: {
+    //       select: {
+    //         id: true,
+    //         name: true,
+    //       },
+    //     },
+    //   },
+    //   where: {
+    //     NOT: { id: dbUserId },
+    //   },
+    // });
 
     const users = await prisma.user.findMany({
       select: {
@@ -159,13 +181,56 @@ export const getAllUsers = async () => {
         },
       },
       where: {
-        NOT: { id: dbUserId },
+        AND: {
+          NOT: { id: dbUserId },
+          approved: onlyUnapproved ? false : false || true,
+        },
       },
     });
-
     return users;
   } catch (error) {
     console.log("Error fetching users : ", error);
     return [];
+  }
+};
+
+export const inviteUser = async ({
+  email,
+  department,
+}: {
+  email: string;
+  department: string;
+}) => {
+  // const email = formData.get("inviteEmail");
+  // const department = formData.get("inviteDepartment");
+  if (!email) throw new Error("Email required");
+  if (typeof email !== "string") {
+    throw new Error("email not string");
+  }
+
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
+
+    if (user) throw new Error("User already exists!");
+
+    const res = await client.invitations.createInvitation({
+      emailAddress: email,
+      notify: true,
+      ignoreExisting: true,
+      publicMetadata: {
+        role: "moderator",
+        approved: false,
+        // ToDo : Add Department ID as well
+      },
+    });
+
+    if (res) return { success: true };
+  } catch (error) {
+    console.log("Error invitingUser :", error);
+    return { success: false };
   }
 };

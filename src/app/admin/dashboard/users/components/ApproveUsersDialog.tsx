@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Dialog,
   DialogClose,
@@ -27,12 +25,11 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "../../../../../components/ui/avatar";
-import RemoveUserForm from "./RemoveUserForm";
+import RemoveUserForm from "./RemoveUserButton";
 import ApproveUserButton from "./ApproveUserButton";
 
-type UsersType = Awaited<ReturnType<typeof getAllUsers>>;
-
-const ApproveUsersDialog = ({ users }: { users: UsersType }) => {
+const ApproveUsersDialog = async () => {
+  const unApprovedUsers = await getAllUsers(true);
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -58,8 +55,8 @@ const ApproveUsersDialog = ({ users }: { users: UsersType }) => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {users.length > 0 ? (
-                  users.map((user) => (
+                {unApprovedUsers.length > 0 ? (
+                  unApprovedUsers.map((user) => (
                     <TableRow key={user.id}>
                       <TableCell className="px-4!">
                         <Avatar className="mx-auto">
