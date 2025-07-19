@@ -24,7 +24,7 @@ export const getPublicDepartments = async () => {
       },
     });
 
-    return departments.map(dept => ({
+    return departments.map((dept) => ({
       ...dept,
       schemesCount: dept._count.schemes,
     }));
@@ -129,7 +129,8 @@ export const getPublicSchemes = async (filters?: {
         },
       },
       orderBy: {
-        name: "asc",
+        createdAt: "desc",
+        // name: "asc",
       },
     });
 
