@@ -5,14 +5,14 @@ import Link from "next/link";
 import SchemeCard from "@/components/SchemeCard";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { 
+import {
   ArrowLeft,
   Phone,
   Mail,
   Building2,
   Users,
   FileText,
-  Images
+  Images,
 } from "lucide-react";
 import { Metadata } from "next";
 
@@ -20,7 +20,9 @@ interface DepartmentDetailsPageProps {
   params: Promise<{ slug: string }>;
 }
 
-export async function generateMetadata({ params }: DepartmentDetailsPageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: DepartmentDetailsPageProps): Promise<Metadata> {
   const { slug } = await params;
   const department = await getPublicDepartmentBySlug(slug);
 
@@ -36,7 +38,9 @@ export async function generateMetadata({ params }: DepartmentDetailsPageProps): 
   };
 }
 
-const DepartmentDetailsPage = async ({ params }: DepartmentDetailsPageProps) => {
+const DepartmentDetailsPage = async ({
+  params,
+}: DepartmentDetailsPageProps) => {
   const { slug } = await params;
   console.log("Fetching department with slug:", slug);
   const department = await getPublicDepartmentBySlug(slug);
@@ -72,7 +76,7 @@ const DepartmentDetailsPage = async ({ params }: DepartmentDetailsPageProps) => 
               />
             </div>
           )}
-          
+
           {/* Department Info */}
           <div className="flex-1">
             <h1 className="text-3xl md:text-4xl font-bold text-govt-blue mb-4">
@@ -81,7 +85,7 @@ const DepartmentDetailsPage = async ({ params }: DepartmentDetailsPageProps) => 
             <p className="text-gray-600 text-lg leading-relaxed mb-6">
               {department.description}
             </p>
-            
+
             {/* Contact Info */}
             <div className="flex flex-wrap gap-4 text-sm">
               {department.contact && (
@@ -115,7 +119,7 @@ const DepartmentDetailsPage = async ({ params }: DepartmentDetailsPageProps) => 
                 View all schemes →
               </Link>
             </div>
-            
+
             {department.schemes.length > 0 ? (
               <div className="grid md:grid-cols-2 gap-6">
                 {department.schemes.map((scheme) => (
@@ -153,7 +157,10 @@ const DepartmentDetailsPage = async ({ params }: DepartmentDetailsPageProps) => 
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {department.images.map((image) => (
-                  <div key={image.id} className="relative h-48 w-full rounded-lg overflow-hidden">
+                  <div
+                    key={image.id}
+                    className="relative h-48 w-full rounded-lg overflow-hidden"
+                  >
                     <Image
                       src={image.url}
                       alt={`${department.name} gallery image`}
@@ -171,16 +178,22 @@ const DepartmentDetailsPage = async ({ params }: DepartmentDetailsPageProps) => 
         <div className="space-y-6">
           {/* Quick Stats */}
           <Card className="p-6">
-            <h3 className="text-lg font-semibold mb-4 text-govt-blue">Department Stats</h3>
+            <h3 className="text-lg font-semibold mb-4 text-govt-blue">
+              Department Stats
+            </h3>
             <div className="space-y-3">
               <div className="flex justify-between">
                 <span className="text-gray-600">Active Schemes:</span>
-                <span className="font-semibold">{department.schemes.length}</span>
+                <span className="font-semibold">
+                  {department.schemes.length}
+                </span>
               </div>
               {department.images && (
                 <div className="flex justify-between">
                   <span className="text-gray-600">Gallery Images:</span>
-                  <span className="font-semibold">{department.images.length}</span>
+                  <span className="font-semibold">
+                    {department.images.length}
+                  </span>
                 </div>
               )}
             </div>
@@ -188,24 +201,29 @@ const DepartmentDetailsPage = async ({ params }: DepartmentDetailsPageProps) => 
 
           {/* Contact Information */}
           <Card className="p-6">
-            <h3 className="text-lg font-semibold mb-4 text-govt-blue">Contact Information</h3>
+            <h3 className="text-lg font-semibold mb-4 text-govt-blue">
+              Contact Information
+            </h3>
             <div className="space-y-3">
               {department.contact && (
                 <div className="flex items-start gap-3">
                   <Phone className="h-5 w-5 text-govt-blue mt-0.5 shrink-0" />
                   <div>
                     <div className="font-medium">Phone</div>
-                    <div className="text-sm text-gray-600">{department.contact}</div>
+                    <div className="text-sm text-gray-600">
+                      {department.contact}
+                    </div>
                   </div>
                 </div>
               )}
-              
+
               <div className="flex items-start gap-3">
                 <Building2 className="h-5 w-5 text-govt-blue mt-0.5 shrink-0" />
                 <div>
                   <div className="font-medium">Office</div>
                   <div className="text-sm text-gray-600">
-                    Panchayat Samiti Wai<br />
+                    Panchayat Samiti Wai
+                    <br />
                     Satara District, Maharashtra
                   </div>
                 </div>
@@ -215,32 +233,36 @@ const DepartmentDetailsPage = async ({ params }: DepartmentDetailsPageProps) => 
 
           {/* Quick Actions */}
           <Card className="p-6">
-            <h3 className="text-lg font-semibold mb-4 text-govt-blue">Quick Actions</h3>
+            <h3 className="text-lg font-semibold mb-4 text-govt-blue">
+              Quick Actions
+            </h3>
             <div className="space-y-3">
-              <Button asChild className="w-full bg-govt-blue hover:bg-govt-blue/90">
+              <Button
+                asChild
+                className="w-full bg-govt-blue hover:bg-govt-blue/90 text-white"
+              >
                 <Link href={`/schemes?department=${department.id}`}>
                   View All Schemes
                 </Link>
               </Button>
-              
+
               <Button asChild variant="outline" className="w-full">
-                <Link href="/contact">
-                  Contact Department
-                </Link>
+                <Link href="/contact">Contact Department</Link>
               </Button>
             </div>
           </Card>
 
           {/* Help */}
           <Card className="p-6 bg-gray-50">
-            <h3 className="text-lg font-semibold mb-2 text-govt-blue">Need Assistance?</h3>
+            <h3 className="text-lg font-semibold mb-2 text-govt-blue">
+              Need Assistance?
+            </h3>
             <p className="text-sm text-gray-600 mb-3">
-              Our team is here to help you with any queries related to this department.
+              Our team is here to help you with any queries related to this
+              department.
             </p>
             <Button asChild variant="outline" size="sm" className="w-full">
-              <Link href="/contact">
-                Get Help
-              </Link>
+              <Link href="/contact">Get Help</Link>
             </Button>
           </Card>
         </div>
