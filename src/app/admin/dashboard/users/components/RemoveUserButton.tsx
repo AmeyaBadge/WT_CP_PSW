@@ -11,31 +11,64 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { Trash2 } from "lucide-react";
-import React from "react";
+import { Loader2, Trash2 } from "lucide-react";
+import React, { useTransition } from "react";
+import { deleteUser } from "@/actions/admin/user.action";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
-const RemoveUserButton = () => {
+const RemoveUserButton = ({ dbUserId }: { dbUserId: string }) => {
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+
+  const handleDelete = () => {
+    startTransition(async () => {
+      try {
+        const result = await deleteUser(dbUserId);
+        if (result.success) {
+          toast.success(result.message);
+          router.refresh();
+        } else {
+          toast.error(result.message);
+        }
+      } catch (error) {
+        toast.error("Failed to delete user");
+      }
+    });
+  };
+
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <Button
           variant={"ghost"}
           className="border border-red-500/20 bg-red-700/10! hover:bg-red-700! text-red-500 hover:text-accent-foreground dark:bg-red-700/10! dark:border-red-500/20 dark:hover:bg-red-700!"
+          disabled={isPending}
         >
-          <Trash2 />
+          {isPending ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <Trash2 />
+          )}
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
+            This action cannot be undone. This will permanently delete the user
+            account and remove all associated data from our servers.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction>Continue</AlertDialogAction>
+          <AlertDialogAction onClick={handleDelete} disabled={isPending}>
+            {isPending ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              "Delete"
+            )}
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

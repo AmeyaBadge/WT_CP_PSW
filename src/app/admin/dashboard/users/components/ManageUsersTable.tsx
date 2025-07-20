@@ -37,7 +37,7 @@ const ManageUsersTable = ({ users }: { users: UsersType }) => {
               </TableCell>
               <TableCell>{user.name}</TableCell>
               <TableCell>{user.email}</TableCell>
-              <TableCell>{user.department?.name ?? "TODO:AssignBtn"}</TableCell>
+              <TableCell>{user.department?.name ?? "ReInvite User"}</TableCell>
               <TableCell>
                 <div className="flex gap-2">
                   <RevokeUserButton dbId={user.id} />

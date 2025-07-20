@@ -273,7 +273,7 @@ export const createScheme = async (formData: FormData) => {
     console.log("Error creating scheme: ", error);
     return {
       success: false,
-      message: error || "Failed to create scheme",
+      message: "Failed to create scheme",
     };
   }
 };
@@ -411,7 +411,7 @@ export const updateScheme = async (id: string, formData: FormData) => {
     console.log("Error updating scheme: ", error);
     return {
       success: false,
-      message: error || "Failed to update scheme",
+      message: "Failed to update scheme",
     };
   }
 };
@@ -465,7 +465,7 @@ export const deleteScheme = async (id: string) => {
     console.log("Error deleting scheme: ", error);
     return {
       success: false,
-      message: error || "Failed to delete scheme",
+      message: "Failed to delete scheme",
     };
   }
 };

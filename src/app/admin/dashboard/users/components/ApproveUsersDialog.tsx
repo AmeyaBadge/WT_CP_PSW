@@ -72,7 +72,7 @@ const ApproveUsersDialog = async () => {
                           <ApproveUserButton dbId={user.id} />
 
                           {/* TODO : Remove user Dialog */}
-                          <RemoveUserForm />
+                          <RemoveUserForm dbUserId={user.id} />
                         </div>
                       </TableCell>
                     </TableRow>

@@ -148,6 +148,89 @@ export const getDbUserId = async () => {
   return user.id;
 };
 
+// Delete user from both Clerk and database
+export const deleteUser = async (dbUserId: string) => {
+  try {
+    // Input validation
+    if (!dbUserId) {
+      return {
+        success: false,
+        message: "Database ID is required",
+      };
+    }
+
+    const { userId } = await auth();
+    if (!userId) {
+      return {
+        success: false,
+        message: "Unauthorized access!",
+      };
+    }
+
+    // Check if user is admin
+    if (!(await isAdmin())) {
+      return {
+        success: false,
+        message: "Only admins can delete users!",
+      };
+    }
+
+    // Find the user first to verify existence and get clerkId
+    const userToDelete = await prisma.user.findFirst({
+      where: {
+        id: dbUserId,
+      },
+    });
+
+    if (!userToDelete) {
+      return {
+        success: false,
+        message: "User not found or IDs don't match",
+      };
+    }
+
+    // Delete from Postgres first
+    try {
+      await prisma.user.delete({
+        where: {
+          id: dbUserId,
+        },
+      });
+    } catch (dbError) {
+      console.error("Database deletion error:", dbError);
+      return {
+        success: false,
+        message: "Failed to delete user from database",
+      };
+    }
+
+    // Delete from Clerk
+    try {
+      await client.users.deleteUser(userToDelete.clerkId);
+    } catch (clerkError) {
+      console.error("Error deleting user from Clerk:", clerkError);
+      // Don't return error here as DB record is already deleted
+      console.warn(
+        "Failed to delete user from Clerk, but database record was removed"
+      );
+    }
+
+    revalidatePath("/admin/dashboard/users");
+
+    return {
+      success: true,
+      message: "User deleted successfully",
+    };
+  } catch (error: any) {
+    console.error("Error deleting user:", error);
+    return {
+      success: false,
+      message: error.message || "Failed to delete user",
+    };
+  }
+};
+
+// Get all users
 export const getAllUsers = async (onlyUnapproved: boolean = false) => {
   try {
     const admin = await isAdmin();
