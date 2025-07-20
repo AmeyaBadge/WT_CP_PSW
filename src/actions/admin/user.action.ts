@@ -279,6 +279,7 @@ export const getAllUsers = async (onlyUnapproved: boolean = false) => {
         },
       },
     });
+    revalidatePath("/admin/dashboard/users");
     return users;
   } catch (error) {
     console.log("Error fetching users : ", error);
