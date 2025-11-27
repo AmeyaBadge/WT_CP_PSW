@@ -221,11 +221,11 @@ export const deleteUser = async (dbUserId: string) => {
       success: true,
       message: "User deleted successfully",
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error deleting user:", error);
     return {
       success: false,
-      message: error.message || "Failed to delete user",
+      message: error instanceof Error ? error.message : "Failed to delete user",
     };
   }
 };

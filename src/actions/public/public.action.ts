@@ -83,7 +83,7 @@ export const getPublicSchemes = async (filters?: {
   search?: string;
 }) => {
   try {
-    const where: any = {};
+    const where: Record<string, unknown> = {};
 
     if (filters?.departmentId) {
       where.departmentId = filters.departmentId;

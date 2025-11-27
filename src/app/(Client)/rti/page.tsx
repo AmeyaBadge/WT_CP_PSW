@@ -28,10 +28,10 @@ const RTIPage = () => {
     }
   };
 
-  const PDFViewer = ({ pdfUrl }) => {
-    const [numPages, setNumPages] = useState(null);
+  const PDFViewer = ({ pdfUrl }: { pdfUrl: string }) => {
+    const [numPages, setNumPages] = useState<number | null>(null);
     const [isReady, setIsReady] = useState(false);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState<string | null>(null);
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
     // Initialize PDF.js worker
@@ -43,7 +43,7 @@ const RTIPage = () => {
           await configureWorker();
           if (mounted) setIsReady(true);
         } catch (err) {
-          if (mounted) setError(err.message);
+          if (mounted) setError(err instanceof Error ? err.message : "Unknown error");
         }
       };
 
@@ -60,8 +60,8 @@ const RTIPage = () => {
       return () => window.removeEventListener("resize", handleResize);
     }, []);
 
-    const onLoadSuccess = ({ numPages }) => setNumPages(numPages);
-    const onLoadError = (error) => setError(error.message);
+    const onLoadSuccess = ({ numPages }: { numPages: number }) => setNumPages(numPages);
+    const onLoadError = (error: Error) => setError(error.message);
 
     const getPageWidth = () => {
       if (windowWidth < 640) return windowWidth - 32; // mobile

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { CldUploadWidget } from "next-cloudinary";
+import { CldUploadWidget, CloudinaryUploadWidgetResults } from "next-cloudinary";
 import { Button } from "@/components/ui/button";
 import { ImageIcon, X, Upload } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -19,8 +19,8 @@ export function CoverImageUpload({
 }: CoverImageUploadProps) {
   const [isUploading, setIsUploading] = useState(false);
 
-  const onUpload = (result: any) => {
-    if (result.event === "success") {
+  const onUpload = (result: CloudinaryUploadWidgetResults) => {
+    if (result.event === "success" && result.info && typeof result.info !== "string" && result.info.secure_url) {
       console.log("Cover image uploaded successfully:", result.info.secure_url);
       onChange(result.info.secure_url);
       setIsUploading(false);

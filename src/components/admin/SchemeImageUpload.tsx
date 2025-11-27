@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { CldUploadWidget } from "next-cloudinary";
+import { CldUploadWidget, CloudinaryUploadWidgetResults } from "next-cloudinary";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ImageIcon, X, Upload } from "lucide-react";
@@ -22,8 +22,8 @@ export function SchemeImageUpload({
 }: SchemeImageUploadProps) {
   const [isUploading, setIsUploading] = useState(false);
 
-  const onUpload = (result: any) => {
-    if (result.event === "success") {
+  const onUpload = (result: CloudinaryUploadWidgetResults) => {
+    if (result.event === "success" && result.info && typeof result.info !== "string" && result.info.secure_url) {
       // Add the new image URL to the existing array
       const newUrl = result.info.secure_url;
       console.log("Image uploaded successfully:", newUrl);

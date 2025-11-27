@@ -10,17 +10,12 @@ import { Metadata } from "next";
 import { checkApproval } from "@/actions/admin/user.action";
 
 interface PageProps {
-  params: {
-    id: string;
-  };
-}
-interface EditDepartmentPageProps {
   params: Promise<{ id: string }>;
 }
 
 export async function generateMetadata({
   params,
-}: EditDepartmentPageProps): Promise<Metadata> {
+}: PageProps): Promise<Metadata> {
   const { id } = await params;
   const department = await getDepartmentById(id);
   return {

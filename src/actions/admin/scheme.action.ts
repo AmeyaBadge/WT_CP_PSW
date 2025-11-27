@@ -528,7 +528,7 @@ export const removeGalleryImage = async (imageId: string) => {
     console.log("Error removing gallery image: ", error);
     return {
       success: false,
-      message: error || "Failed to remove gallery image",
+      message: error instanceof Error ? error.message : "Failed to remove gallery image",
     };
   }
 };

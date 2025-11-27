@@ -156,7 +156,7 @@ const SchemeForm = ({ initialData, departments, isAdmin, mode }: SchemeFormProps
               <Label htmlFor="type">Scheme Type *</Label>
               <Select
                 value={formData.type}
-                onValueChange={(value) => setFormData(prev => ({ ...prev, type: value as any }))}
+                onValueChange={(value) => setFormData(prev => ({ ...prev, type: value as "Central" | "State" | "Local" }))}
               >
                 <SelectTrigger className="mt-2">
                   <SelectValue placeholder="Select scheme type" />
