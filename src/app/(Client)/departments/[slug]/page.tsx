@@ -13,8 +13,10 @@ import {
   Users,
   FileText,
   Images,
+  Network,
 } from "lucide-react";
 import { Metadata } from "next";
+import HierarchyTree, { HierarchyNode } from "@/components/HierarchyTree";
 
 interface DepartmentDetailsPageProps {
   params: Promise<{ slug: string }>;
@@ -44,6 +46,13 @@ const DepartmentDetailsPage = async ({
   const { slug } = await params;
   console.log("Fetching department with slug:", slug);
   const department = await getPublicDepartmentBySlug(slug);
+
+  if (!department) {
+    notFound();
+  }
+
+  // Get hierarchy data from database
+  const hierarchy = (department.hierarchy as HierarchyNode[]) || [];
 
   if (!department) {
     notFound();
@@ -170,6 +179,19 @@ const DepartmentDetailsPage = async ({
                   </div>
                 ))}
               </div>
+            </section>
+          )}
+
+          {/* Department Hierarchy */}
+          {hierarchy && hierarchy.length > 0 && (
+            <section>
+              <h2 className="text-2xl font-bold text-govt-blue mb-6 flex items-center gap-2">
+                <Network className="h-6 w-6" />
+                Department Hierarchy
+              </h2>
+              <Card className="p-6">
+                <HierarchyTree hierarchy={hierarchy} />
+              </Card>
             </section>
           )}
         </div>

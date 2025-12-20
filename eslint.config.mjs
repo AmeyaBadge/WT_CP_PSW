@@ -38,6 +38,7 @@
 
 //   // ✅ Then bring in your old-style Next.js ESLint config
 //   ...compat.extends("next/core-web-vitals", "next/typescript"),
+
 // ];
 
 import { FlatCompat } from "@eslint/eslintrc";
