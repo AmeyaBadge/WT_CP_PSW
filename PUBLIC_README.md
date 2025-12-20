@@ -11,7 +11,6 @@
 
 A comprehensive digital transformation solution for rural governance in Maharashtra, India. This platform demonstrates enterprise-level full-stack development with government-grade security standards and bilingual user experience.
 
-
 ## 🎯 Project Vision
 
 This project showcases the development of a modern, scalable governance platform that bridges the digital divide in rural administration. Built to handle real-world government operations while maintaining the highest security standards and accessibility requirements.
