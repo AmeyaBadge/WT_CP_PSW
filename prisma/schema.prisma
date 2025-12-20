@@ -19,17 +19,18 @@ model User {
   departmentId  String?
   approved      Boolean        @default(false)
   announcements Announcement[]
-  department    Department?    @relation(fields: [departmentId], references: [id])
+  schemes       Scheme[]
+  department    Department?    @relation(fields: [departmentId], references: [id], onDelete: SetNull)
 }
 
 model Announcement {
   id        String           @id @default(cuid())
-  creatorId String
+  creatorId String?
   type      AnnouncementType
   title     String
   content   String?
   createdAt DateTime         @default(now())
-  creator   User             @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  creator   User?            @relation(fields: [creatorId], references: [id], onDelete: SetNull)
 }
 
 model Department {
@@ -62,7 +63,7 @@ model Scheme {
   description         String
   image               String?
   departmentId        String
-  creatorId           String
+  creatorId           String?
   type                SchemeType
   eligibility         String?
   deadline            DateTime?
@@ -72,13 +73,12 @@ model Scheme {
   applyLink           String?
   applicationFormLink String?
 
-  createdAt          DateTime   @default(now())
+  createdAt DateTime @default(now())
 
   // Relations
-  // faqs FAQ[]
   images     Gallery[]
   department Department @relation(fields: [departmentId], references: [id])
-
+  creator    User?      @relation(fields: [creatorId], references: [id], onDelete: SetNull)
 
   @@index([slug])
 }
