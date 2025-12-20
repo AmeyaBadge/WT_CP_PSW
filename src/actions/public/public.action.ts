@@ -46,6 +46,7 @@ export const getPublicDepartmentBySlug = async (slug: string) => {
         description: true,
         image: true,
         contact: true,
+        hierarchy: true,
         schemes: {
           select: {
             id: true,

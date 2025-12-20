@@ -11,15 +11,18 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Separator } from "@/components/ui/separator";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import HierarchyEditor, { HierarchyNode } from "@/components/admin/HierarchyEditor";
 
 export default function CreateDepartmentForm() {
   const router = useRouter();
   const [coverImage, setCoverImage] = useState("");
+  const [hierarchy, setHierarchy] = useState<HierarchyNode[]>([]);
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -41,6 +44,7 @@ export default function CreateDepartmentForm() {
         ...formData,
         slug,
         image: coverImage,
+        hierarchy,
       });
 
       toast.success("Department created successfully");
@@ -132,6 +136,11 @@ export default function CreateDepartmentForm() {
                   />
                 </div>
               </div>
+
+              <Separator className="my-4" />
+
+              {/* Hierarchy Editor */}
+              <HierarchyEditor value={hierarchy} onChange={setHierarchy} />
             </div>
           </CardContent>
         </Card>

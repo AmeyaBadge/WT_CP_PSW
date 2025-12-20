@@ -6,12 +6,14 @@ import { generateDepartmentSlug } from "@/actions/admin/department.action";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Separator } from "@/components/ui/separator";
 import { Department } from "@/generated/prisma/client";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import HierarchyEditor, { HierarchyNode } from "@/components/admin/HierarchyEditor";
 
 interface UpdateDepartmentFormProps {
-  department: Department;
+  department: Department & { hierarchy?: HierarchyNode[] | null };
   updateDepartment: (
     id: string,
     data: {
@@ -20,6 +22,7 @@ interface UpdateDepartmentFormProps {
       description?: string;
       contact?: string;
       image?: string;
+      hierarchy?: HierarchyNode[];
     }
   ) => Promise<Department>;
 }
@@ -29,6 +32,9 @@ export default function UpdateDepartmentForm({
   updateDepartment,
 }: UpdateDepartmentFormProps) {
   const [coverImage, setCoverImage] = useState(department.image);
+  const [hierarchy, setHierarchy] = useState<HierarchyNode[]>(
+    (department.hierarchy as HierarchyNode[]) || []
+  );
 
   async function handleSubmit(formData: FormData) {
     const name = formData.get("name") as string;
@@ -42,6 +48,7 @@ export default function UpdateDepartmentForm({
       contact: formData.get("contact") as string,
       image: coverImage,
       slug,
+      hierarchy,
     };
 
     try {
@@ -96,6 +103,13 @@ export default function UpdateDepartmentForm({
           />
         </div>
       </div>
+
+      <Separator className="my-6" />
+
+      {/* Hierarchy Editor */}
+      <HierarchyEditor value={hierarchy} onChange={setHierarchy} />
+
+      <Separator className="my-6" />
 
       <div className="flex justify-end">
         <SubmitBtn>Save Changes</SubmitBtn>

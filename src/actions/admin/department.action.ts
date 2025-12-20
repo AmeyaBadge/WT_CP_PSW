@@ -82,12 +82,20 @@ export const getDepartmentById = async (id: string) => {
   }
 };
 
+// Type for hierarchy node
+interface HierarchyNode {
+  title: string;
+  name: string;
+  children?: HierarchyNode[];
+}
+
 export const createDepartment = async (data: {
   name: string;
   slug: string;
   description: string;
   contact: string;
   image: string;
+  hierarchy?: HierarchyNode[];
 }) => {
   try {
     const { userId } = await auth();
@@ -155,6 +163,7 @@ export const updateDepartment = async (
     description?: string;
     contact?: string;
     image?: string;
+    hierarchy?: HierarchyNode[];
   }
 ) => {
   try {

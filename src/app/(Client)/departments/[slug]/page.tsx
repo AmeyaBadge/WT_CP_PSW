@@ -16,8 +16,7 @@ import {
   Network,
 } from "lucide-react";
 import { Metadata } from "next";
-import HierarchyTree from "@/components/HierarchyTree";
-import { departments as departmentConstants } from "@/constants/public/departments";
+import HierarchyTree, { HierarchyNode } from "@/components/HierarchyTree";
 
 interface DepartmentDetailsPageProps {
   params: Promise<{ slug: string }>;
@@ -52,11 +51,8 @@ const DepartmentDetailsPage = async ({
     notFound();
   }
 
-  // Get hierarchy data from constants (fallback static data)
-  const departmentConstant = departmentConstants.find(
-    (d) => d.id === slug || d.name.toLowerCase().replace(/\s+/g, '-') === slug.toLowerCase()
-  );
-  const hierarchy = departmentConstant?.hierarchy || [];
+  // Get hierarchy data from database
+  const hierarchy = (department.hierarchy as HierarchyNode[]) || [];
 
   if (!department) {
     notFound();
