@@ -118,10 +118,12 @@ const AnnouncementsPage = async () => {
                       </span>
                     </div>
                     
-                    <div className="flex items-center gap-1">
-                      <User className="h-4 w-4" />
-                      <span>By {announcement.creator.name}</span>
-                    </div>
+                    {announcement.creator && (
+                      <div className="flex items-center gap-1">
+                        <User className="h-4 w-4" />
+                        <span>By {announcement.creator.name}</span>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

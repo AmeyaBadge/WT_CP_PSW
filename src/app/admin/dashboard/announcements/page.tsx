@@ -21,7 +21,7 @@ function transformData(
     title: string;
     content: string | null;
     type: string; // or use the actual enum type if defined
-    creator: { name: string };
+    creator: { name: string } | null;
     createdAt: Date;
   }[]
 ) {
@@ -30,7 +30,7 @@ function transformData(
     title: item.title,
     content: item.content,
     type: item.type as AnnouncementType,
-    creator: item.creator.name,
+    creator: item.creator?.name ?? "Unknown",
     createdAt: new Date(item.createdAt).toLocaleString("en-IN", {
       dateStyle: "long",
       timeStyle: "short",
