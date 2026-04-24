@@ -4,6 +4,7 @@ import { auth } from "@clerk/nextjs/server";
 import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { checkRole } from "@/lib/roles";
+import { Prisma } from "@/generated/prisma";
 
 export const getCurrentUserDepartmentId = async () => {
   try {
@@ -89,6 +90,15 @@ interface HierarchyNode {
   children?: HierarchyNode[];
 }
 
+const toPrismaJsonHierarchy = (
+  hierarchy?: HierarchyNode[],
+): Prisma.InputJsonValue | undefined => {
+  if (hierarchy === undefined) return undefined;
+
+  // Convert to plain JSON-compatible input shape for Prisma Json fields.
+  return JSON.parse(JSON.stringify(hierarchy)) as Prisma.InputJsonValue;
+};
+
 export const createDepartment = async (data: {
   name: string;
   slug: string;
@@ -105,8 +115,17 @@ export const createDepartment = async (data: {
     const isAdmin = await checkRole("admin");
     if (!isAdmin) throw new Error("Only administrators can create departments");
 
+    const createData: Prisma.DepartmentCreateInput = {
+      name: data.name,
+      slug: data.slug,
+      description: data.description,
+      contact: data.contact,
+      image: data.image,
+      hierarchy: toPrismaJsonHierarchy(data.hierarchy),
+    };
+
     const department = await prisma.department.create({
-      data,
+      data: createData,
     });
 
     revalidatePath("/admin/dashboard/departments");
@@ -119,7 +138,7 @@ export const createDepartment = async (data: {
 
 export const generateDepartmentSlug = async (
   name: string,
-  excludeId?: string
+  excludeId?: string,
 ) => {
   try {
     const baseSlug = name
@@ -164,7 +183,7 @@ export const updateDepartment = async (
     contact?: string;
     image?: string;
     hierarchy?: HierarchyNode[];
-  }
+  },
 ) => {
   try {
     const { userId } = await auth();
@@ -175,9 +194,22 @@ export const updateDepartment = async (
     if (!isAuthorized)
       throw new Error("You don't have permission to edit this department");
 
+    const updateData: Prisma.DepartmentUpdateInput = {
+      ...(data.name !== undefined ? { name: data.name } : {}),
+      ...(data.slug !== undefined ? { slug: data.slug } : {}),
+      ...(data.description !== undefined
+        ? { description: data.description }
+        : {}),
+      ...(data.contact !== undefined ? { contact: data.contact } : {}),
+      ...(data.image !== undefined ? { image: data.image } : {}),
+      ...(data.hierarchy !== undefined
+        ? { hierarchy: toPrismaJsonHierarchy(data.hierarchy) }
+        : {}),
+    };
+
     const department = await prisma.department.update({
       where: { id },
-      data,
+      data: updateData,
     });
 
     revalidatePath("/admin/dashboard/departments");
