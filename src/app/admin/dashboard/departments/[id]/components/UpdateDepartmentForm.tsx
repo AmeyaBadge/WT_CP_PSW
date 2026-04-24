@@ -13,7 +13,7 @@ import toast from "react-hot-toast";
 import HierarchyEditor, { HierarchyNode } from "@/components/admin/HierarchyEditor";
 
 interface UpdateDepartmentFormProps {
-  department: Department & { hierarchy?: HierarchyNode[] | null };
+  department: any;
   updateDepartment: (
     id: string,
     data: {
