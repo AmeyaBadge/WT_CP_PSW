@@ -160,23 +160,7 @@ const PublicFooter = () => {
               Designed, Developed & Maintained by
             </p>
             <p className="mt-1 font-medium">
-              <Link
-                href="https://www.linkedin.com/in/ameyabadge"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block hover:text-govt-saffron transition-colors hover:scale-105 transform duration-200"
-              >
-                Ameya
-              </Link>
-              <span className="mx-2 text-gray-400">&</span>
-              <Link
-                href="https://www.linkedin.com/in/chetan-jain-0011b3229/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block hover:text-govt-saffron transition-colors hover:scale-105 transform duration-200"
-              >
-                Chetan
-              </Link>
+              Group 10
             </p>
           </div>
         </div>
