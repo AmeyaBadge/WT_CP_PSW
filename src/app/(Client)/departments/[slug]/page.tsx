@@ -52,7 +52,7 @@ const DepartmentDetailsPage = async ({
   }
 
   // Get hierarchy data from database
-  const hierarchy = (department.hierarchy as HierarchyNode[]) || [];
+  const hierarchy = (department.hierarchy as unknown as HierarchyNode[]) || [];
 
   if (!department) {
     notFound();
