@@ -10,7 +10,9 @@ import { Separator } from "@/components/ui/separator";
 import { Department } from "@/generated/prisma/client";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import HierarchyEditor, { HierarchyNode } from "@/components/admin/HierarchyEditor";
+import HierarchyEditor, {
+  HierarchyNode,
+} from "@/components/admin/HierarchyEditor";
 
 interface UpdateDepartmentFormProps {
   department: any;
@@ -23,7 +25,7 @@ interface UpdateDepartmentFormProps {
       contact?: string;
       image?: string;
       hierarchy?: HierarchyNode[];
-    }
+    },
   ) => Promise<Department>;
 }
 
@@ -33,7 +35,7 @@ export default function UpdateDepartmentForm({
 }: UpdateDepartmentFormProps) {
   const [coverImage, setCoverImage] = useState(department.image);
   const [hierarchy, setHierarchy] = useState<HierarchyNode[]>(
-    (department.hierarchy as HierarchyNode[]) || []
+    (department.hierarchy as HierarchyNode[]) || [],
   );
 
   async function handleSubmit(formData: FormData) {
